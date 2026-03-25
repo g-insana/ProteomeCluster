@@ -1,0 +1,5 @@
+biopython>=1.78
+ffdb>=2.5.7
+filelock>=3.12.4
+tqdm>=4.60.0
+scipy>=1.13.0

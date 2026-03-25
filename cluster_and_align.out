@@ -1,0 +1,101 @@
+N E X T F L O W  ~  version 23.04.1
+Launching `cluster_and_align.nf` [gloomy_perlman] DSL2 - revision: bbbd3e0abd
+NF:Cluster and Align (author: Giuseppe Insana)
+-----
+CONFIGURATION:
+proteomesdir: /homes/insana/proteomescomparisons/github/proteomes/
+outdir: /homes/insana/proteomescomparisons/github/outdir/
+-----
+covmode: 0
+coverage: 0.9
+seq_id_mode: 0
+min_seq_id: 0.9
+-----
+fasta_prefix: proteome_
+fasta_extension: .fa
+-----
+proteomes_threshold: 3
+-----
+MAIN: cluster -> label -> filter -> extract -> align
+PLUS: index, create_matrix
+-----
+[-        ] process > gather_fasta      -
+[-        ] process > index_fasta       -
+[-        ] process > cluster_proteomes -
+[-        ] process > label_clusters    -
+[-        ] process > filter_clusters   -
+[-        ] process > create_matrix     -
+
+[8d/36c546] process > gather_fasta (ecoli)      [100%] 2 of 2, cached: 2 ✔
+[8f/8254a0] process > index_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
+[6a/cf414d] process > cluster_proteomes (ecoli) [100%] 2 of 2, cached: 2 ✔
+[88/ed7452] process > label_clusters (ecoli)    [100%] 1 of 1, cached: 1
+[-        ] process > filter_clusters           -
+[-        ] process > create_matrix             -
+[-        ] process > extract_clusters          -
+[-        ] process > align_clusters            -
+
+[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
+[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
+[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
+[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
+[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
+[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
+[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
+[-        ] process > align_clusters             -
+
+[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
+[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
+[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
+[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
+[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
+[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
+[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
+[-        ] process > align_clusters             [  0%] 0 of 2
+
+executor >  slurm (2)
+[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
+[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
+[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
+[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
+[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
+[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
+[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
+[90/970f63] process > align_clusters (ecoli)     [  0%] 0 of 2
+
+executor >  slurm (2)
+[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
+[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
+[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
+[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
+[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
+[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
+[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
+[90/970f63] process > align_clusters (ecoli)     [  0%] 0 of 2
+
+executor >  slurm (2)
+[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
+[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
+[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
+[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
+[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
+[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
+[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
+[b9/c53067] process > align_clusters (spneumo)   [ 50%] 1 of 2
+
+executor >  slurm (2)
+[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
+[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
+[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
+[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
+[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
+[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
+[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
+[90/970f63] process > align_clusters (ecoli)     [100%] 2 of 2 ✔
+Completed at: 25-Mar-2026 00:08:20
+Duration    : 4m 48s
+CPU hours   : 0.2 (40.9% cached)
+Succeeded   : 2
+Cached      : 14
+
+
