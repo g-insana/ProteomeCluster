@@ -50,8 +50,6 @@ Options for comprehensive outputs:
 
 | Options | Values  | Help |
 | ------- | ------- | ---- |
-| *positional arguments* | |
-| *optional arguments* | |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
 | <pre>-p --prefix</pre> | Optional.<br/>Type: str | Prefix for fasta filenames, to be added to proteome identifiers\; e.g. \'proteome\_\' |
 | <pre>-e --extension</pre> | Optional.<br/>Type: str | Extension for files in fasta\_dir, to be added to proteome identifiers\; e.g. \'.fa\' |

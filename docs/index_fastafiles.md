@@ -23,8 +23,6 @@ Parallel processing
 
 | Options | Values  | Help |
 | ------- | ------- | ---- |
-| *positional arguments* | |
-| *optional arguments* | |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
 | <pre>-i --input\_file</pre> | Optional.<br/>Type: Unknown | Path to the fasta file to be indexed |
 | <pre>-l --list</pre> | Optional.<br/>Type: Unknown | Path to a file containing a list of filepaths to index |

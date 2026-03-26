@@ -52,8 +52,6 @@ Distributed approach (batch tagging, optionally parallel):
 
 | Options | Values  | Help |
 | ------- | ------- | ---- |
-| *positional arguments* | |
-| *optional arguments* | |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
 | <pre>-f --fasta\_dir</pre> | FASTA_DIR<br/>Required.<br/>Type: str | Directory containing all .fa files |
 | <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input file |

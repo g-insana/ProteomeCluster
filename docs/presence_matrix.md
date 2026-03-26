@@ -35,8 +35,6 @@ Example call:
 
 | Options | Values  | Help |
 | ------- | ------- | ---- |
-| *positional arguments* | |
-| *optional arguments* | |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
 | <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input filefirst column cluster\_id, second column protein\_ids \(proteome\_id\:protein\_id space separated pairs\) |
 | <pre>-p --proteomes</pre> | PROTEOMES<br/>Required.<br/>Type: Unknown | Path to the list of proteomes or proteome labels mapping file\: either one \(proteome\_ids\) or two columns \(proteome\_id proteome\_label\) |

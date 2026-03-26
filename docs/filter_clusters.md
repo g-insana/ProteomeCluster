@@ -31,8 +31,6 @@ Example call:
 
 | Options | Values  | Help |
 | ------- | ------- | ---- |
-| *positional arguments* | |
-| *optional arguments* | |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
 | <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input file |
 | <pre>-o --out\_file</pre> | OUT_FILE<br/>Required.<br/>Type: str | Path to the output file |

@@ -16,8 +16,6 @@ Example calls:
 
 | Options | Values  | Help |
 | ------- | ------- | ---- |
-| *positional arguments* | |
-| *optional arguments* | |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
 | <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing. |
 | <pre>-e --extension</pre> | Type: str<br/>Default: `.fa` | File extension for FASTA files \(default\: .fa\). |
