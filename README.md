@@ -282,7 +282,7 @@ inspect_merge_splits.py mergesplits.tsv mapping.tsv file1.tsv file2.tsv
 
 Instead of running the Nextflow pipeline you can use the individual Python scripts to execute specific steps independently. This is useful for debugging, custom workflows, or integrating ProtComp components into other pipelines.
 
-Below is a brief documentation for each script. Complete documentation available going to the individual doc pages (click on any script name below).
+Below is a brief documentation for each script. Complete documentation is available (simply click on the script name below).
 
 ---
 
