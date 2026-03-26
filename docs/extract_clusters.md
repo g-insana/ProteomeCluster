@@ -53,21 +53,21 @@ Options for comprehensive outputs:
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
 | <pre>-p --prefix</pre> | Optional.<br/>Type: str | Prefix for fasta filenames, to be added to proteome identifiers\; e.g. \'proteome\_\' |
 | <pre>-e --extension</pre> | Optional.<br/>Type: str | Extension for files in fasta\_dir, to be added to proteome identifiers\; e.g. \'.fa\' |
-| <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing. |
+| <pre>-t --threads</pre> | Default: `1` | Number of threads for parallel processing. |
 | <pre>-f --force</pre> | Flag. | Force overwrite of existing cluster output files. |
 | <pre>-q --progress</pre> | Flag. | Show a progress bar |
 | *Fasta sequences from \(choose one\)* | |
 | <pre>-d --fasta\_dir</pre> | Optional.<br/>Type: str | Directory containing all proteome fasta files |
-| <pre>-s --single\_file</pre> | Optional.<br/>Type: Unknown | Path to a single fasta file where to extract all identifiers from |
+| <pre>-s --single\_file</pre> | Optional.<br/>Type: file | Path to a single fasta file where to extract all identifiers from |
 | <pre>-w --web</pre> | Optional.<br/>Type: str | URL to web API where to fetch fasta sequences by UPI identifier e.g. \'https\://rest.uniprot.org/uniparc/\{UPI\}.fasta\' \(\{UPI\} is where the UniParc identifier will be placed in the request |
 | *Input and Output* | |
-| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input file |
+| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: file | Path to the input file |
 | <pre>-o --out\_dir</pre> | OUT_DIR<br/>Required.<br/>Type: str | Directory where the cluster .fa files will be written |
 | *Comprehensive output* | |
 | <pre>-u --uniq</pre> | Flag. | Only keep unique sequences \(merging the identifiers into one header\) in case multiple protein identifiers have the same sequence. |
 | <pre>-a --all</pre> | Flag. | Keep all proteome labels in case the same protein\_id is tagged to multiple proteomes in the input file. |
 | <pre>-ut --uniqterse</pre> | Flag. | Only keep unique sequences \(under the first seen identifier and without proteome label\: shortest header\) |
 | *Filtering options* | |
-| <pre>-m --minproteins</pre> | Type: Unknown<br/>Default: `1` | Optionally only extract clusters that contain at least this number of proteins. Note that this is checked first, before applying restricted filter. |
-| <pre>-r --restrict</pre> | Optional.<br/>Type: Unknown | Path to a file containing proteome identifiers. If given, only sequences belonging to the proteomes from that file will be extracted. |
+| <pre>-m --minproteins</pre> | Type: int<br/>Default: `1` | Optionally only extract clusters that contain at least this number of proteins. Note that this is checked first, before applying --restrict filter. |
+| <pre>-r --restrict</pre> | Optional.<br/>Type: file | Path to a file containing proteome identifiers. If given, only sequences belonging to the proteomes from that file will be extracted. |
 | <pre>-c --cluster</pre> | Optional.<br/>Type: str | Optionally specify which cluster\(s\) to extract, by cluster\_id \(multiple cluster\_id can be specified, space separated\) |

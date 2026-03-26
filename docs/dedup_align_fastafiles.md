@@ -17,7 +17,7 @@ Example calls:
 | Options | Values  | Help |
 | ------- | ------- | ---- |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
-| <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing. |
+| <pre>-t --threads</pre> | Default: `1` | Number of threads for parallel processing. |
 | <pre>-e --extension</pre> | Type: str<br/>Default: `.fa` | File extension for FASTA files \(default\: .fa\). |
 | <pre>-a --all</pre> | Flag. | Skip the deduplication step and align all sequences |
 | <pre>-q --progress</pre> | Flag. | Show a progress bar |
@@ -25,11 +25,11 @@ Example calls:
 | <pre>-c --consensus</pre> | Flag. | Writes consensus line to file .cns, if present \(clustal format only\) |
 | *Input Options \(choose one\)* | |
 | <pre>-d --fasta\_dir</pre> | Optional.<br/>Type: str | Directory containing fasta files to be aligned. |
-| <pre>-l --fasta\_list</pre> | Optional.<br/>Type: Unknown | Path to a text file containing a list of FASTA files. |
+| <pre>-l --fasta\_list</pre> | Optional.<br/>Type: file | Path to a text file containing a list of FASTA files. |
 | <pre>-s --single\_file</pre> | Optional.<br/>Type: str | Fasta file name\(s\), space separated |
 | *Clustal Omega specific arguments* | |
 | <pre>-o --out\_dir</pre> | OUT_DIR<br/>Required.<br/>Type: str | Output directory for aligned files. |
-| <pre>-at --align\_threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for Clustal Omega. |
+| <pre>-at --align\_threads</pre> | Default: `1` | Number of threads for Clustal Omega. |
 | <pre>-f --force</pre> | Flag. | Force overwrite of existing output files. |
 | <pre>-st --seqtype</pre> | Type: str<br/>Choice: `Protein`, `DNA`<br/>Default: `Protein` | Specify the sequence type \(e.g., \'Protein\' or \'DNA\'\). |
 | <pre>-of --outfmt</pre> | Type: str<br/>Choice: `fasta`, `clustal`, `stockholm`<br/>Default: `fasta` | Specify the MSA output format. |

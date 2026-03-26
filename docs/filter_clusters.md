@@ -32,10 +32,10 @@ Example call:
 | Options | Values  | Help |
 | ------- | ------- | ---- |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
-| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input file |
+| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: file | Path to the input file |
 | <pre>-o --out\_file</pre> | OUT_FILE<br/>Required.<br/>Type: str | Path to the output file |
-| <pre>-m --minproteomes</pre> | Type: Unknown<br/>Default: `1` | Optionally filter clusters which contain proteins from at least this number of unique proteomes |
-| <pre>-t --topproteomes</pre> | Optional.<br/>Type: Unknown | Optionally filter clusters which contain proteins from no more than this number of unique proteomes |
+| <pre>-m --minproteomes</pre> | Type: int<br/>Default: `1` | Optionally filter clusters which contain proteins from at least this number of unique proteomes |
+| <pre>-t --topproteomes</pre> | Optional.<br/>Type: int | Optionally filter clusters which contain proteins from no more than this number of unique proteomes |
 | <pre>-q --progress</pre> | Flag. | Show a progress bar |
 | <pre>-s --strict</pre> | Flag. | Ignore any protein\_id which is not labelled as belonging to a proteome\_id |
 | <pre>-a --all</pre> | Flag. | Keep all the proteome tags if several are listed in the proteomes column of the input file. Otherwise only the first one will be printed |

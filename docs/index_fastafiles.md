@@ -24,11 +24,11 @@ Parallel processing
 | Options | Values  | Help |
 | ------- | ------- | ---- |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
-| <pre>-i --input\_file</pre> | Optional.<br/>Type: Unknown | Path to the fasta file to be indexed |
-| <pre>-l --list</pre> | Optional.<br/>Type: Unknown | Path to a file containing a list of filepaths to index |
+| <pre>-i --input\_file</pre> | Optional.<br/>Type: file | Path to the fasta file to be indexed |
+| <pre>-l --list</pre> | Optional.<br/>Type: file | Path to a file containing a list of filepaths to index |
 | <pre>-d --fasta\_dir</pre> | Optional.<br/>Type: str | Directory containing fasta files \(with .fa extension unless -e specified\) |
 | <pre>-e --extension</pre> | Type: str<br/>Default: `.fa` | Extension for files in fasta\_dir\; default \'.fa\' |
 | <pre>-f --force</pre> | Flag. | Force re-creation of existing index files |
 | <pre>-q --progress</pre> | Flag. | Show a progress bar |
 | <pre>-p --pattern</pre> | Default: `\^\(.\+\\\|.\*\)\$` | Regexp Capture pattern for identifiers to index in fasta header. Default is\: \'\^\(.\+\\\|.\*\)\$\' |
-| <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing |
+| <pre>-t --threads</pre> | Type: int<br/>Default: `1` | Number of threads for parallel processing |

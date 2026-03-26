@@ -36,12 +36,12 @@ Example call:
 | Options | Values  | Help |
 | ------- | ------- | ---- |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
-| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input filefirst column cluster\_id, second column protein\_ids \(proteome\_id\:protein\_id space separated pairs\) |
-| <pre>-p --proteomes</pre> | PROTEOMES<br/>Required.<br/>Type: Unknown | Path to the list of proteomes or proteome labels mapping file\: either one \(proteome\_ids\) or two columns \(proteome\_id proteome\_label\) |
+| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: file | Path to the input filefirst column cluster\_id, second column protein\_ids \(proteome\_id\:protein\_id space separated pairs\) |
+| <pre>-p --proteomes</pre> | PROTEOMES<br/>Required.<br/>Type: file | Path to the list of proteomes or proteome labels mapping file\: either one \(proteome\_ids\) or two columns \(proteome\_id proteome\_label\) |
 | <pre>-o --out\_file</pre> | OUT_FILE<br/>Required.<br/>Type: str | Path to the matrix output file |
 | <pre>-m --members\_file</pre> | Optional.<br/>Type: str | Path to the optional cluster members file |
-| <pre>-l --labels</pre> | Optional.<br/>Type: Unknown | optional cluster labels mapping file\: two columns \(cluster\_id cluster\_label\)\; NOTE that if same label is applied to different cluster\_id, the corresponding rows will be merged |
-| <pre>-a --additional</pre> | Optional.<br/>Type: Unknown | optional .acc file for additional singleton clusters to add to the output matrix\: 2nd col \= cluster\_id, 4th col \= proteome\_id |
+| <pre>-l --labels</pre> | Optional.<br/>Type: file | optional cluster labels mapping file\: two columns \(cluster\_id cluster\_label\)\; NOTE that if same label is applied to different cluster\_id, the corresponding rows will be merged |
+| <pre>-a --additional</pre> | Optional.<br/>Type: file | optional .acc file for additional singleton clusters to add to the output matrix\: 2nd col \= cluster\_id, 4th col \= proteome\_id |
 | <pre>-t --totals</pre> | Flag. | Add a column with total proteomes per cluster |
 | <pre>-c --counts</pre> | Flag. | Add a final row with cluster counts per proteome |
 | <pre>-s --strict</pre> | Flag. | Ensure totals match \(if -t used\) |
