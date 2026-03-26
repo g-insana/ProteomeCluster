@@ -159,7 +159,7 @@ nextflow run cluster_and_align.nf \
   -profile local -resume
 ```
 
-See full list of parameters below in the [Documentation(#-documentation) section.
+See full list of parameters below in the [Documentation](#-documentation) section.
 
 ---
 
