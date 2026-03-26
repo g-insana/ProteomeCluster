@@ -1,92 +1,422 @@
-# ProtComp - Proteome Comparison Framework: Pipeline and tools for clustering and comparing proteomes
+# ProtComp - Proteome Comparison Framework
 
-A NextFlow pipeline and Python scripts for comprehensive analyses of proteomes data, providing:
-- Clustering via MMseqs2
-- Labelling, filtering and aggregation of clusters
-- Alignments and Variation analyses
-- Meta clustering comparisons
+Pipeline and tools for clustering, comparing, and analyzing proteomes at scale.
 
-## Features
+ProtComp combines a **Nextflow pipeline** with **Python utilities** to perform clustering, filtering, alignments, and comparative analyses of proteomes (or genomes).
 
-* Basic workflow:
-The pipeline uses `mmseqs2` to cluster sequences of proteomes, with all parameters easily configurable.
-It labels the cluster members according to the proteomes where each protein originates.
-A desired level of filtering can also be applied, to keep only clusters with proteins from a specified number of proteomes.
+---
 
-It creates:
-- Clusters TSV with full membership and additional information (like range of sequence length variation or sequence length mode of the cluster)
-- Presence absence matrix
+## 🚀 Overview
 
-* Extended workflow:
-The pipeline can also be directed to extract the sequences of the clusters and optionally align them, in order to study intra-cluster variation across isolates.
+ProtComp enables:
 
-It creates:
-- Cluster fasta files
-- Cluster alignments
+- High-performance **protein clustering** using MMseqs2
+- Flexible **cluster filtering and annotation**
+- Optional **sequence extraction and multiple alignment**
+- Advanced **comparison of clustering strategies**
+- Exploration of **merge/split cluster events**
+- Analyses of **protein frequency** across isolates
+- Inter- and intra- cluster **sequence variation****
+- **Variome analysis
 
-* Meta clustering
-Also included are scripts to compare two different clusterings (for example obtained with different parameters) and compute similarity, identify overlap, find matching clusters and identify and explore split/merge events
-
-* Variation analysis
-Creation of variome (WIP)
-
-The pipeline can run locally or on HPC via e.g. slurm/lsf.
+The pipeline is designed to run both **locally** and on **HPC systems (SLURM/LSF)**.
 The single processes can also be run independently via the provided python scripts.
 
-## Requirements
+---
 
-Clustering requires [MMseqs2](https://github.com/soedinglab/MMseqs2), which must be installed and accessible via the command line.
-For extraction of sequences: [ffdb](https://github.com/g-insana/ffdb.py).
-For alignments, it depends on [biopython](https://biopython.org/) and [clustalo](https://en.wikipedia.org/wiki/Clustal).
-And, only for computing meta-clustering similarity metrics: [scikit-learn](https://scikit-learn.org).
+## ✨ Features
 
-## Download and installation
+### 🔹 Basic Workflow
 
-``` bash
-pip3 install git+https://github.com/g-insana/ProtComp.git
-```
-  (from [GitHub](https://github.com/g-insana/ProtComp/)).
+- Clusters proteins using `mmseqs2`
+- Labels cluster members by proteome of origin
+- Filters clusters based on proteome representation
 
+**Outputs:**
+(for each species or dataset)
+- `*_clusters.tsv`
+  - Cluster membership
+  - Sequence length range and mode
+- `*_matrix.tsv`
+  - presence absence matrix with row and column counts
 
-## Quickstart
+---
 
-1. Place fasta files of proteomes to be analysed in `proteomesdir/` folder (several subfolders can be created for parallel processing, e.g. one per species)
+### 🔹 Extended Workflow
 
-2. Simply run one of the provided shell scripts for either the basic workflow:
+Optional downstream processing after clustering:
 
-``` bash
-./cluster_only-local.sh
-./cluster_only-slurm.sh #if on hpc
-```
+- Extract sequences per cluster
+- Align them by cluster
 
-or the extended one:
-``` bash
-./cluster_and_align-local.sh
-./cluster_and_align-slurm.sh #if on hpc
-```
+**Outputs:**
 
-to start the NextFlow pipeline.
+- Cluster FASTA files
+- Cluster alignment files
 
-3. Results will appear under `outdir/` folder.
+---
 
-Note that some test files (a total of ten [UniProtKB](https://www.uniprot.org/) proteomes belonging to two species) are already provided, so you can try out the execution without any setup.
+### 🔹 Meta-Clustering Comparison
 
-All parameters are configurable, simply edit or adapt the provided shell script or run directly from command line with desired options, e.g.:
+Compare different clustering runs (e.g. parameter tuning):
+
+- Compute similarity metrics
+- Identify overlapping clusters
+- Detect cluster **merge/split events**
+
+---
+
+### 🔹 Variation Analysis (WIP)
+
+- Framework for building and analyzing **variomes**
+
+---
+
+## 📦 Requirements
+
+- [MMseqs2](https://github.com/soedinglab/MMseqs2)
+- [Nextflow](https://www.nextflow.io/)
+- Python ≥ 3.8
+
+Optional:
+
+- [ffdb](https://github.com/g-insana/ffdb.py) (for sequence extraction)
+- [Biopython](https://biopython.org/) (for alignment processing)
+- Clustal Omega (`clustalo`) (for multiple sequence alignments)
+- [scikit-learn](https://scikit-learn.org) (for meta-clustering metrics)
+
+---
+
+## 📥 Installation
+
 ```bash
-nextflow run cluster_and_align.nf --proteomes_threshold 10 --coverage 0.8 --extract
+git clone https://github.com/g-insana/ProtComp.git
 ```
 
-## Documentation
+---
+
+## ⚡ Quickstart 1 2 3
+
+### 1. Prepare Input
+
+Place proteome FASTA files under:
+
+```
+proteomesdir/
+```
+
+You can organize them in subfolders (e.g. per species or per dataset) and they will be processed in parallel.
+
+---
+
+### 2. Run Pipeline
+(either locally or on HPC)
+
+#### Basic workflow
+
+```bash
+./cluster_only-local.sh
+./cluster_only-slurm.sh
+```
+
+#### Extended workflow
+
+```bash
+./cluster_and_align-local.sh
+./cluster_and_align-slurm.sh
+```
+
+---
+
+### 3. Results
+
+Output files will be written to:
+
+```
+outdir/
+```
+
+---
+
+### 🧪 Test Dataset
+
+Included:
+
+- 10 proteomes from UniProtKB
+- Two species
+
+Run immediately without setup.
+
+---
+
+## ⚙️ Pipeline Usage
+
+Instead of the provided scripts you can for example run it on command line, e.g.:
+
+```bash
+nextflow run cluster_and_align.nf \
+  --proteomesdir ${proteomesdir} \
+  --outdir ${outdir} \
+  --covmode 0 \
+  --min_seq_id 0.9 \
+  --coverage 0.9 \
+  --proteomes_threshold 3 \
+  -profile local -resume
+```
+
+See full list of parameters below in the **Documentation** section.
+
+---
+
+## 🧠 Best Practices
+
+- Start with **strict thresholds** (for coverage, sequence identity, covmode) for high-confidence clusters
+- Use **meta-clustering tools** (see below for Documentation) to tune parameters and compare with the high-confidence clusters
+- Align `maxForks` and threads on HPC systems to your resources and requirements
+- Use `--extract` and `--align` only if needed
+
+---
+
+## 🛠️ Running on HPC
+
+Use provided scripts:
+
+```bash
+./cluster_and_align-slurm.sh
+```
+
+Adjust:
+
+- Threads
+- Memory
+- maxForks
+
+---
+
+## 📚 Documentation
+
+### Nextflow Pipeline
+#### Core Parameters
+
+| Parameter | Description |
+|----------|------------|
+| `--proteomesdir` | Input proteome directory |
+| `--outdir` | Output directory |
+| `--proteomes_threshold` | Minimum proteomes per cluster |
+| `--extract` | Extract sequences |
+| `--align` | Perform alignments |
+
+---
+
+#### MMseqs2 Clustering
+
+| Parameter | Description |
+|----------|------------|
+| `--covmode` | Coverage mode (0=bidirectional, 1=target, 2=query) |
+| `--coverage` | Minimum alignment coverage (0–1) |
+| `--min_seq_id` | Minimum sequence identity (0–1) |
+| `--seq_id_mode` | Identity calculation mode |
+
+---
+
+#### Performance
+
+| Parameter | Description |
+|----------|------------|
+| `--clusterthreads` | Threads for clustering |
+| `--labelthreads` | Threads for labeling |
+| `--extractthreads` | Threads for extraction |
+| `--alignthreads` | Threads for alignment |
+| `--clustalothreads` | Threads for Clustal Omega |
+| `--maxForks` | Max parallel processes |
+
+---
+
+#### Advanced
+
+```bash
+--mmseqs_additional "--clust-hash 1 --kmer-per-seq 100 ..."
+```
+(custom MMseqs2 parameters for tuning speed vs sensitivity vs accuracy)
+
+### Cluster Comparison Tools
+
+Two scripts are provided:
+
+### 1️⃣ compare_clusters.py
+
+Compare two clustering results:
+- compute overlap between protein identifiers of the two clusterings
+- map clusters according to Jaccard and Szymkiewicz–Simpson thresholds (IoU and containment)
+- write the mapping between clusters of the two clustering results
+- identify split/merge/complex events
+- compute similarity metrics (`adjusted_rand_score` and `adjusted_mutual_info_score`)
+
+```bash
+compare_clusters.py clusters_file1.tsv clusters_file2.tsv
+```
+
+#### Key Options
+
+| Option | Description |
+|-------|------------|
+| `-m` | Minimum proteomes per cluster |
+| `-j` | Minimum Jaccard index (default 0.3) |
+| `-c` | Containment threshold: Szymkiewicz–Simpson coefficient (default 0.9) |
+| `-t` | Max proteomes per cluster |
+| `-p` | Protein ID format |
+| `-o` | Output prefix |
+
+#### Optional Flags
+
+- `--skip_metrics`
+- `--skip_writing_overlap`
+- `--skip_writing_mapping`
+
+---
+
+### 2️⃣ inspect_merge_splits.py
+
+Analyze cluster merge/split events:
+- extract clusters involved (sampling if desired)
+- align them
+- prepare list of alignments for visual comparison
+
+```bash
+inspect_merge_splits.py mergesplits.tsv mapping.tsv file1.tsv file2.tsv
+```
+
+#### Key Options (all optional)
+
+| Option | Description |
+|-------|------------|
+| `-os` | Output suffix |
+| `-op` | Output prefix |
+| `-m` | Max sampled events |
+| `-t` | Threads |
+
+
+### Variation Analysis
 (WIP)
 
-### For the NextFlow pipeline
+### Individual processes
 
-### For Comparison of Clusterings
+Instead of running the Nextflow pipeline you could use the individual python scripts to run specific processes on your data. Here is the documentation for all the scripts.
 
-### For Variation analysis
+### Individual processes
 
-## Copyright
+Instead of running the Nextflow pipeline you can use the individual Python scripts to execute specific steps independently. This is useful for debugging, custom workflows, or integrating ProtComp components into other pipelines.
 
-`ProtComp` is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+Below is a brief documentation for each script. Complete documentation available going to the individual doc pages (click on any script name below).
+
+---
+
+## 🏷️ Labelling
+
+### [`label_clusters.py`](docs/label_clusters.md)
+
+This script labels the second column of a TSV (protein IDs) with the FASTA filename(s) (proteome identifiers) where each protein appears, compacts cluster IDs to sequential integers, and flags the representative protein for each cluster. Input row order is preserved.
+
+```bash
+usage: label_clusters.py [-h] -f FASTA_DIR -i INPUT_FILE -o OUT_FILE [-p PREFIX] [-e EXTENSION]
+                         [-n NOLABEL] [-s] [-u] [-t THREADS] [-b BATCHSIZE] [-c CHUNKSIZE] [-q]
+```
+
+---
+
+## 🔍 Filtering
+
+### [`filter_clusters.py`](docs/filter_clusters.md)
+
+Script to extract lists of protein identifiers for clusters defined in a tsv file
+    (like the output files of `label_clusters.py`)
+The file is assumed to contain at least three columns, with the first three
+being `cluster_id`, `protein_id` and `proteomes`.
+
+
+```bash
+usage: filter_clusters.py [-h] -i INPUT_FILE -o OUT_FILE [-m MINPROTEOMES] [-t TOPPROTEOMES] [-q] [-s]
+                          [-a]
+```
+
+---
+
+## 📦 Extraction
+
+### [`extract_clusters.py`](docs/extract_clusters.md)
+
+This script extracts FASTA sequences for protein identifiers grouped by cluster from a TSV (like the output of `filter_clusters.py`), retrieving sequences from ffdb-indexed FASTA files and writing one FASTA file per cluster.
+
+```bash
+usage: extract_clusters.py [-h] (-d FASTA_DIR | -s SINGLE_FILE | -w URL) -i INPUT_FILE -o OUT_DIR [-u]
+                           [-a] [-ut] [-m MINPROTEINS] [-r RESTRICT] [-c CLUSTER [CLUSTER ...]]
+                           [-p PREFIX] [-e EXTENSION] [-t THREADS] [-f] [-q]
+
+```
+
+---
+
+## 🧬 Alignment
+
+### [`dedup_align_fastafiles.py`](docs/dedup_align_fastafiles.md)
+
+Wrapper around Clustal Omega that can find and deduplicate sequences across FASTA files, run alignments and optionally create mapping files of duplicates.
+
+```bash
+usage: dedup_align_fastafiles.py [-h]
+                                 (-d INPUT_FASTA_DIR | -l INPUT_FASTA_LIST | -s FASTA_FILE [FASTA_FILE ...])
+                                 [-t THREADS] [-e EXTENSION] [-a] [-q] [-m] [-c] -o OUT_DIR
+                                 [-at ALIGN_THREADS] [-f] [-st {Protein,DNA}]
+                                 [-of {fasta,clustal,stockholm}]
+```
+
+---
+
+## 🧮 Presence/Absence Matrix
+
+### [`presence_matrix.py`](docs/presence_matrix.md)
+
+Script to create a presence/absence (and count) matrix where the columns
+are proteomes, the rows are clusters and the values are either 0 if there are no proteins from a
+column proteome in the row cluster or a positive integer corresponding to the number of proteins from
+that proteome in the cluster.
+
+```bash
+usage: presence_matrix.py [-h] -i INPUT_FILE -p PROTEOMES -o OUT_FILE [-m MEMBERS_FILE] [-l LABELS]
+                          [-a ADDITIONAL] [-t] [-c] [-s]
+```
+
+---
+
+## ⚡FASTA Indexing (Extra Utility)
+
+### [`index_fastafiles.py`](docs/index_fastafiles.md)
+
+Indexes FASTA files for fast random access. It supports indexing a single file, a list of files or all the files with a given extension present in a directory.
+
+```bash
+usage: index_fastafiles.py [-h] (-i INPUT_FILE | -l LIST | -d FASTA_DIR) [-e EXTENSION] [-f] [-q]
+                           [-p PATTERN] [-t THREADS]
+```
+
+---
+
+## 📜 License
+
+ProtComp is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 (c) Copyright [Giuseppe Insana](https://insana.net), 2024-
+
+---
+
+## 🤝 Contributions
+
+Contributions, issues, and feature requests are welcome.
+
+---
+
+## 📌 Citation
+
+If you use ProtComp in your research, please consider citing the repository.
+
+---
