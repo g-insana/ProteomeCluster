@@ -10,14 +10,14 @@ ProtComp combines a **Nextflow pipeline** with **Python utilities** to perform c
 
 ProtComp enables:
 
-- High-performance **protein clustering** using MMseqs2
+- High-performance **clustering** using MMseqs2
 - Flexible **cluster filtering and annotation**
 - Optional **sequence extraction and multiple alignment**
 - Advanced **comparison of clustering strategies**
 - Exploration of **merge/split cluster events**
 - Analyses of **protein frequency** across isolates
-- Inter- and intra- cluster **sequence variation****
-- **Variome analysis
+- Inter- and intra- cluster **sequence variation**
+- **Variome analysis**
 
 The pipeline is designed to run both **locally** and on **HPC systems (SLURM/LSF)**.
 The single processes can also be run independently via the provided python scripts.
@@ -100,7 +100,6 @@ git clone https://github.com/g-insana/ProtComp.git
 ### 1. Prepare Input
 
 Place proteome FASTA files under:
-
 ```
 proteomesdir/
 ```
@@ -131,7 +130,6 @@ You can organize them in subfolders (e.g. per species or per dataset) and they w
 ### 3. Results
 
 Output files will be written to:
-
 ```
 outdir/
 ```
@@ -142,8 +140,8 @@ outdir/
 
 Included:
 
-- 10 proteomes from UniProtKB
-- Two species
+- 10 proteomes from [UniProtKB](https://https://www.uniprot.org)
+- belonging to two species
 
 Run immediately without setup.
 
@@ -155,41 +153,22 @@ Instead of the provided scripts you can for example run it on command line, e.g.
 
 ```bash
 nextflow run cluster_and_align.nf \
-  --proteomesdir ${proteomesdir} \
-  --outdir ${outdir} \
-  --covmode 0 \
   --min_seq_id 0.9 \
   --coverage 0.9 \
   --proteomes_threshold 3 \
   -profile local -resume
 ```
 
-See full list of parameters below in the **Documentation** section.
+See full list of parameters below in the [Documentation(#-documentation) section.
 
 ---
 
 ## 🧠 Best Practices
 
 - Start with **strict thresholds** (for coverage, sequence identity, covmode) for high-confidence clusters
-- Use **meta-clustering tools** (see below for Documentation) to tune parameters and compare with the high-confidence clusters
-- Align `maxForks` and threads on HPC systems to your resources and requirements
+- Use **meta-clustering tools** (see below for the Documentation) to tune parameters and compare with the high-confidence clustering
+- Align `maxForks` and threads on HPC systems to your resources and needs
 - Use `--extract` and `--align` only if needed
-
----
-
-## 🛠️ Running on HPC
-
-Use provided scripts:
-
-```bash
-./cluster_and_align-slurm.sh
-```
-
-Adjust:
-
-- Threads
-- Memory
-- maxForks
 
 ---
 
@@ -298,10 +277,6 @@ inspect_merge_splits.py mergesplits.tsv mapping.tsv file1.tsv file2.tsv
 
 ### Variation Analysis
 (WIP)
-
-### Individual processes
-
-Instead of running the Nextflow pipeline you could use the individual python scripts to run specific processes on your data. Here is the documentation for all the scripts.
 
 ### Individual processes
 
@@ -417,6 +392,6 @@ Contributions, issues, and feature requests are welcome.
 
 ## 📌 Citation
 
-If you use ProtComp in your research, please consider citing the repository.
+If you use ProtComp in your research, please consider citing this repository.
 
 ---
