@@ -21,24 +21,16 @@ E.g.
 Parallel processing
     The files can be indexed in parallel by specifying --threads
 
-usage: index_fastafiles.py [-h] (-i INPUT_FILE | -l LIST | -d FASTA_DIR) [-e EXTENSION] [-f] [-q]
-                           [-p PATTERN] [-t THREADS]
-
-Indexer for fasta files.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -i INPUT_FILE, --input_file INPUT_FILE
-                        Path to the fasta file to be indexed
-  -l LIST, --list LIST  Path to a file containing a list of filepaths to index
-  -d FASTA_DIR, --fasta_dir FASTA_DIR
-                        Directory containing fasta files (with .fa extension unless -e specified)
-  -e EXTENSION, --extension EXTENSION
-                        Extension for files in fasta_dir; default '.fa'
-  -f, --force           Force re-creation of existing index files
-  -q, --progress        Show a progress bar
-  -p PATTERN, --pattern PATTERN
-                        Regexp Capture pattern for identifiers to index in fasta header. Default is:
-                        '^(.+\|.*)$'
-  -t THREADS, --threads THREADS
-                        Number of threads for parallel processing
+| Options | Values  | Help |
+| ------- | ------- | ---- |
+| *positional arguments* | |
+| *optional arguments* | |
+| <pre>-h --help</pre> | Flag. | show this help message and exit |
+| <pre>-i --input\_file</pre> | Optional.<br/>Type: Unknown | Path to the fasta file to be indexed |
+| <pre>-l --list</pre> | Optional.<br/>Type: Unknown | Path to a file containing a list of filepaths to index |
+| <pre>-d --fasta\_dir</pre> | Optional.<br/>Type: str | Directory containing fasta files \(with .fa extension unless -e specified\) |
+| <pre>-e --extension</pre> | Type: str<br/>Default: `.fa` | Extension for files in fasta\_dir\; default \'.fa\' |
+| <pre>-f --force</pre> | Flag. | Force re-creation of existing index files |
+| <pre>-q --progress</pre> | Flag. | Show a progress bar |
+| <pre>-p --pattern</pre> | Default: `\^\(.\+\\\|.\*\)\$` | Regexp Capture pattern for identifiers to index in fasta header. Default is\: \'\^\(.\+\\\|.\*\)\$\' |
+| <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing |

@@ -29,24 +29,15 @@ Sample output file:
 Example call:
     ./filter_clusters.py --input_file results_pig/Labelled_Specie_protein_cluster.tsv --out_file results_pig/Protein_clusters_m13.tsv --minproteomes 13 --all -q
 
-usage: filter_clusters.py [-h] -i INPUT_FILE -o OUT_FILE [-m MINPROTEOMES] [-t TOPPROTEOMES] [-q] [-s]
-                          [-a]
-
-Protein clusters filter.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -i INPUT_FILE, --input_file INPUT_FILE
-                        Path to the input file
-  -o OUT_FILE, --out_file OUT_FILE
-                        Path to the output file
-  -m MINPROTEOMES, --minproteomes MINPROTEOMES
-                        Optionally filter clusters which contain proteins from at least this number of
-                        unique proteomes
-  -t TOPPROTEOMES, --topproteomes TOPPROTEOMES
-                        Optionally filter clusters which contain proteins from no more than this
-                        number of unique proteomes
-  -q, --progress        Show a progress bar
-  -s, --strict          Ignore any protein_id which is not labelled as belonging to a proteome_id
-  -a, --all             Keep all the proteome tags if several are listed in the proteomes column of
-                        the input file. Otherwise only the first one will be printed
+| Options | Values  | Help |
+| ------- | ------- | ---- |
+| *positional arguments* | |
+| *optional arguments* | |
+| <pre>-h --help</pre> | Flag. | show this help message and exit |
+| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input file |
+| <pre>-o --out\_file</pre> | OUT_FILE<br/>Required.<br/>Type: str | Path to the output file |
+| <pre>-m --minproteomes</pre> | Type: Unknown<br/>Default: `1` | Optionally filter clusters which contain proteins from at least this number of unique proteomes |
+| <pre>-t --topproteomes</pre> | Optional.<br/>Type: Unknown | Optionally filter clusters which contain proteins from no more than this number of unique proteomes |
+| <pre>-q --progress</pre> | Flag. | Show a progress bar |
+| <pre>-s --strict</pre> | Flag. | Ignore any protein\_id which is not labelled as belonging to a proteome\_id |
+| <pre>-a --all</pre> | Flag. | Keep all the proteome tags if several are listed in the proteomes column of the input file. Otherwise only the first one will be printed |

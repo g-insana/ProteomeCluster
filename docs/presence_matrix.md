@@ -33,31 +33,17 @@ An optional cluster members file can be created, specifying its filename (-m).
 Example call:
     presence_matrix.py -i Protein_clusters_m2.tsv -o matrix.tsv -p proteomelabels.tsv -l clusterlabels.tsv -a add_singletons.acc -t
 
-usage: presence_matrix.py [-h] -i INPUT_FILE -p PROTEOMES -o OUT_FILE [-m MEMBERS_FILE] [-l LABELS]
-                          [-a ADDITIONAL] [-t] [-c] [-s]
-
-Create presence/absence TSV matrix from a filtered protein clusters tsv. Optionally create cluster
-members file as well.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -i INPUT_FILE, --input_file INPUT_FILE
-                        Path to the input filefirst column cluster_id, second column protein_ids
-                        (proteome_id:protein_id space separated pairs)
-  -p PROTEOMES, --proteomes PROTEOMES
-                        Path to the list of proteomes or proteome labels mapping file: either one
-                        (proteome_ids) or two columns (proteome_id proteome_label)
-  -o OUT_FILE, --out_file OUT_FILE
-                        Path to the matrix output file
-  -m MEMBERS_FILE, --members_file MEMBERS_FILE
-                        Path to the optional cluster members file
-  -l LABELS, --labels LABELS
-                        optional cluster labels mapping file: two columns (cluster_id cluster_label);
-                        NOTE that if same label is applied to different cluster_id, the corresponding
-                        rows will be merged
-  -a ADDITIONAL, --additional ADDITIONAL
-                        optional .acc file for additional singleton clusters to add to the output
-                        matrix: 2nd col = cluster_id, 4th col = proteome_id
-  -t, --totals          Add a column with total proteomes per cluster
-  -c, --counts          Add a final row with cluster counts per proteome
-  -s, --strict          Ensure totals match (if -t used)
+| Options | Values  | Help |
+| ------- | ------- | ---- |
+| *positional arguments* | |
+| *optional arguments* | |
+| <pre>-h --help</pre> | Flag. | show this help message and exit |
+| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input filefirst column cluster\_id, second column protein\_ids \(proteome\_id\:protein\_id space separated pairs\) |
+| <pre>-p --proteomes</pre> | PROTEOMES<br/>Required.<br/>Type: Unknown | Path to the list of proteomes or proteome labels mapping file\: either one \(proteome\_ids\) or two columns \(proteome\_id proteome\_label\) |
+| <pre>-o --out\_file</pre> | OUT_FILE<br/>Required.<br/>Type: str | Path to the matrix output file |
+| <pre>-m --members\_file</pre> | Optional.<br/>Type: str | Path to the optional cluster members file |
+| <pre>-l --labels</pre> | Optional.<br/>Type: Unknown | optional cluster labels mapping file\: two columns \(cluster\_id cluster\_label\)\; NOTE that if same label is applied to different cluster\_id, the corresponding rows will be merged |
+| <pre>-a --additional</pre> | Optional.<br/>Type: Unknown | optional .acc file for additional singleton clusters to add to the output matrix\: 2nd col \= cluster\_id, 4th col \= proteome\_id |
+| <pre>-t --totals</pre> | Flag. | Add a column with total proteomes per cluster |
+| <pre>-c --counts</pre> | Flag. | Add a final row with cluster counts per proteome |
+| <pre>-s --strict</pre> | Flag. | Ensure totals match \(if -t used\) |

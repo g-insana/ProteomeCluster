@@ -50,33 +50,20 @@ Distributed approach (batch tagging, optionally parallel):
       the same chunk, but it uses more disk space and could suffer i/o performance loss when combining
       result files in the end.
 
-usage: label_clusters.py [-h] -f FASTA_DIR -i INPUT_FILE -o OUT_FILE [-p PREFIX] [-e EXTENSION]
-                         [-n NOLABEL] [-s] [-u] [-t THREADS] [-b BATCHSIZE] [-c CHUNKSIZE] [-q]
-
-Proteome labeller for clusters of protein identifiers.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -f FASTA_DIR, --fasta_dir FASTA_DIR
-                        Directory containing all .fa files
-  -i INPUT_FILE, --input_file INPUT_FILE
-                        Path to the input file
-  -o OUT_FILE, --out_file OUT_FILE
-                        Path to the output file
-  -p PREFIX, --prefix PREFIX
-                        Optionally prefix for filenames, which will be removed; e.g. 'proteome_'
-  -e EXTENSION, --extension EXTENSION
-                        Extension for files in fasta_dir (e.g. '.fa')
-  -n NOLABEL, --nolabel NOLABEL
-                        Optional string for missing mapping; default is '' (e.g. '?')
-  -s, --sortlabels      Optionally sort the labels in the output file
-  -u, --uniq            Optionally uniq the input file (in case it has repeated lines)
-  -t THREADS, --threads THREADS
-                        Number of threads for parallel processing
-  -b BATCHSIZE, --batchsize BATCHSIZE
-                        Max number of fasta files that will be processed at the same time
-  -c CHUNKSIZE, --chunksize CHUNKSIZE
-                        Chunk size in which to split the input file; if not specified: split the input
-                        file in a number of chunks equal to thrice the number of threads; minimum
-                        chunksize: 5m; use 'n' to avoid splitting the input file
-  -q, --progress        Show a progress bar
+| Options | Values  | Help |
+| ------- | ------- | ---- |
+| *positional arguments* | |
+| *optional arguments* | |
+| <pre>-h --help</pre> | Flag. | show this help message and exit |
+| <pre>-f --fasta\_dir</pre> | FASTA_DIR<br/>Required.<br/>Type: str | Directory containing all .fa files |
+| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input file |
+| <pre>-o --out\_file</pre> | OUT_FILE<br/>Required.<br/>Type: str | Path to the output file |
+| <pre>-p --prefix</pre> | Optional.<br/>Type: str | Optionally prefix for filenames, which will be removed\; e.g. \'proteome\_\' |
+| <pre>-e --extension</pre> | Optional.<br/>Type: str | Extension for files in fasta\_dir \(e.g. \'.fa\'\) |
+| <pre>-n --nolabel</pre> | Optional.<br/>Type: str | Optional string for missing mapping\; default is \'\' \(e.g. \'\?\'\) |
+| <pre>-s --sortlabels</pre> | Flag. | Optionally sort the labels in the output file |
+| <pre>-u --uniq</pre> | Flag. | Optionally uniq the input file \(in case it has repeated lines\) |
+| <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing |
+| <pre>-b --batchsize</pre> | Optional.<br/>Type: Unknown | Max number of fasta files that will be processed at the same time |
+| <pre>-c --chunksize</pre> | Optional.<br/>Type: str | Chunk size in which to split the input file\; if not specified\: split the input file in a number of chunks equal to thrice the number of threads\; minimum chunksize\: 5m\; use \'n\' to avoid splitting the input file |
+| <pre>-q --progress</pre> | Flag. | Show a progress bar |

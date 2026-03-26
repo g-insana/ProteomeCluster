@@ -48,55 +48,28 @@ Options for comprehensive outputs:
 
         --all assumes that the input was produced using --all option of the filter_proteomes script
 
-usage: extract_clusters.py [-h] (-d FASTA_DIR | -s SINGLE_FILE | -w URL) -i INPUT_FILE -o OUT_DIR [-u]
-                           [-a] [-ut] [-m MINPROTEINS] [-r RESTRICT] [-c CLUSTER [CLUSTER ...]]
-                           [-p PREFIX] [-e EXTENSION] [-t THREADS] [-f] [-q]
-
-Clusters sequence extraction.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -p PREFIX, --prefix PREFIX
-                        Prefix for fasta filenames, to be added to proteome identifiers; e.g.
-                        'proteome_'
-  -e EXTENSION, --extension EXTENSION
-                        Extension for files in fasta_dir, to be added to proteome identifiers; e.g.
-                        '.fa'
-  -t THREADS, --threads THREADS
-                        Number of threads for parallel processing.
-  -f, --force           Force overwrite of existing cluster output files.
-  -q, --progress        Show a progress bar
-
-Fasta sequences from (choose one):
-  -d FASTA_DIR, --fasta_dir FASTA_DIR
-                        Directory containing all proteome fasta files
-  -s SINGLE_FILE, --single_file SINGLE_FILE
-                        Path to a single fasta file where to extract all identifiers from
-  -w URL, --web URL     URL to web API where to fetch fasta sequences by UPI identifier e.g.
-                        'https://rest.uniprot.org/uniparc/{UPI}.fasta' ({UPI} is where the UniParc
-                        identifier will be placed in the request
-
-Input and Output:
-  -i INPUT_FILE, --input_file INPUT_FILE
-                        Path to the input file
-  -o OUT_DIR, --out_dir OUT_DIR
-                        Directory where the cluster .fa files will be written
-
-Comprehensive output:
-  -u, --uniq            Only keep unique sequences (merging the identifiers into one header) in case
-                        multiple protein identifiers have the same sequence.
-  -a, --all             Keep all proteome labels in case the same protein_id is tagged to multiple
-                        proteomes in the input file.
-  -ut, --uniqterse      Only keep unique sequences (under the first seen identifier and without
-                        proteome label: shortest header)
-
-Filtering options:
-  -m MINPROTEINS, --minproteins MINPROTEINS
-                        Optionally only extract clusters that contain at least this number of
-                        proteins. Note that this is checked first, before applying restricted filter.
-  -r RESTRICT, --restrict RESTRICT
-                        Path to a file containing proteome identifiers. If given, only sequences
-                        belonging to the proteomes from that file will be extracted.
-  -c CLUSTER [CLUSTER ...], --cluster CLUSTER [CLUSTER ...]
-                        Optionally specify which cluster(s) to extract, by cluster_id (multiple
-                        cluster_id can be specified, space separated)
+| Options | Values  | Help |
+| ------- | ------- | ---- |
+| *positional arguments* | |
+| *optional arguments* | |
+| <pre>-h --help</pre> | Flag. | show this help message and exit |
+| <pre>-p --prefix</pre> | Optional.<br/>Type: str | Prefix for fasta filenames, to be added to proteome identifiers\; e.g. \'proteome\_\' |
+| <pre>-e --extension</pre> | Optional.<br/>Type: str | Extension for files in fasta\_dir, to be added to proteome identifiers\; e.g. \'.fa\' |
+| <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing. |
+| <pre>-f --force</pre> | Flag. | Force overwrite of existing cluster output files. |
+| <pre>-q --progress</pre> | Flag. | Show a progress bar |
+| *Fasta sequences from \(choose one\)* | |
+| <pre>-d --fasta\_dir</pre> | Optional.<br/>Type: str | Directory containing all proteome fasta files |
+| <pre>-s --single\_file</pre> | Optional.<br/>Type: Unknown | Path to a single fasta file where to extract all identifiers from |
+| <pre>-w --web</pre> | Optional.<br/>Type: str | URL to web API where to fetch fasta sequences by UPI identifier e.g. \'https\://rest.uniprot.org/uniparc/\{UPI\}.fasta\' \(\{UPI\} is where the UniParc identifier will be placed in the request |
+| *Input and Output* | |
+| <pre>-i --input\_file</pre> | INPUT_FILE<br/>Required.<br/>Type: Unknown | Path to the input file |
+| <pre>-o --out\_dir</pre> | OUT_DIR<br/>Required.<br/>Type: str | Directory where the cluster .fa files will be written |
+| *Comprehensive output* | |
+| <pre>-u --uniq</pre> | Flag. | Only keep unique sequences \(merging the identifiers into one header\) in case multiple protein identifiers have the same sequence. |
+| <pre>-a --all</pre> | Flag. | Keep all proteome labels in case the same protein\_id is tagged to multiple proteomes in the input file. |
+| <pre>-ut --uniqterse</pre> | Flag. | Only keep unique sequences \(under the first seen identifier and without proteome label\: shortest header\) |
+| *Filtering options* | |
+| <pre>-m --minproteins</pre> | Type: Unknown<br/>Default: `1` | Optionally only extract clusters that contain at least this number of proteins. Note that this is checked first, before applying restricted filter. |
+| <pre>-r --restrict</pre> | Optional.<br/>Type: Unknown | Path to a file containing proteome identifiers. If given, only sequences belonging to the proteomes from that file will be extracted. |
+| <pre>-c --cluster</pre> | Optional.<br/>Type: str | Optionally specify which cluster\(s\) to extract, by cluster\_id \(multiple cluster\_id can be specified, space separated\) |

@@ -14,40 +14,24 @@ Example calls:
     dedup_align_fastafiles.py -l my_fastas.txt -o aligned_out -m -q # align files listed in a text file, create duplicate mapping files, show progress
     dedup_align_fastafiles.py -l my_fastas.txt -a -o aligned_out # align all sequences of listed files, skipping deduplication step
 
-usage: dedup_align_fastafiles.py [-h]
-                                 (-d INPUT_FASTA_DIR | -l INPUT_FASTA_LIST | -s FASTA_FILE [FASTA_FILE ...])
-                                 [-t THREADS] [-e EXTENSION] [-a] [-q] [-m] [-c] -o OUT_DIR
-                                 [-at ALIGN_THREADS] [-f] [-st {Protein,DNA}]
-                                 [-of {fasta,clustal,stockholm}]
-
-Clustal Omega wrapper with sequence deduplication
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -t THREADS, --threads THREADS
-                        Number of threads for parallel processing.
-  -e EXTENSION, --extension EXTENSION
-                        File extension for FASTA files (default: .fa).
-  -a, --all             Skip the deduplication step and align all sequences
-  -q, --progress        Show a progress bar
-  -m, --mapfiles        Create mapping files with duplicated sequences
-  -c, --consensus       Writes consensus line to file .cns, if present (clustal format only)
-
-Input Options (choose one):
-  -d INPUT_FASTA_DIR, --fasta_dir INPUT_FASTA_DIR
-                        Directory containing fasta files to be aligned.
-  -l INPUT_FASTA_LIST, --fasta_list INPUT_FASTA_LIST
-                        Path to a text file containing a list of FASTA files.
-  -s FASTA_FILE [FASTA_FILE ...], --single_file FASTA_FILE [FASTA_FILE ...]
-                        Fasta file name(s), space separated
-
-Clustal Omega specific arguments:
-  -o OUT_DIR, --out_dir OUT_DIR
-                        Output directory for aligned files.
-  -at ALIGN_THREADS, --align_threads ALIGN_THREADS
-                        Number of threads for Clustal Omega.
-  -f, --force           Force overwrite of existing output files.
-  -st {Protein,DNA}, --seqtype {Protein,DNA}
-                        Specify the sequence type (e.g., 'Protein' or 'DNA').
-  -of {fasta,clustal,stockholm}, --outfmt {fasta,clustal,stockholm}
-                        Specify the MSA output format.
+| Options | Values  | Help |
+| ------- | ------- | ---- |
+| *positional arguments* | |
+| *optional arguments* | |
+| <pre>-h --help</pre> | Flag. | show this help message and exit |
+| <pre>-t --threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for parallel processing. |
+| <pre>-e --extension</pre> | Type: str<br/>Default: `.fa` | File extension for FASTA files \(default\: .fa\). |
+| <pre>-a --all</pre> | Flag. | Skip the deduplication step and align all sequences |
+| <pre>-q --progress</pre> | Flag. | Show a progress bar |
+| <pre>-m --mapfiles</pre> | Flag. | Create mapping files with duplicated sequences |
+| <pre>-c --consensus</pre> | Flag. | Writes consensus line to file .cns, if present \(clustal format only\) |
+| *Input Options \(choose one\)* | |
+| <pre>-d --fasta\_dir</pre> | Optional.<br/>Type: str | Directory containing fasta files to be aligned. |
+| <pre>-l --fasta\_list</pre> | Optional.<br/>Type: Unknown | Path to a text file containing a list of FASTA files. |
+| <pre>-s --single\_file</pre> | Optional.<br/>Type: str | Fasta file name\(s\), space separated |
+| *Clustal Omega specific arguments* | |
+| <pre>-o --out\_dir</pre> | OUT_DIR<br/>Required.<br/>Type: str | Output directory for aligned files. |
+| <pre>-at --align\_threads</pre> | Type: Unknown<br/>Default: `1` | Number of threads for Clustal Omega. |
+| <pre>-f --force</pre> | Flag. | Force overwrite of existing output files. |
+| <pre>-st --seqtype</pre> | Type: str<br/>Choice: `Protein`, `DNA`<br/>Default: `Protein` | Specify the sequence type \(e.g., \'Protein\' or \'DNA\'\). |
+| <pre>-of --outfmt</pre> | Type: str<br/>Choice: `fasta`, `clustal`, `stockholm`<br/>Default: `fasta` | Specify the MSA output format. |
