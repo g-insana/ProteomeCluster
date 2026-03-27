@@ -2,7 +2,7 @@
 
 Pipelines and tools for clustering, comparing, and analyzing proteomes at scale.
 
-ProtClustComp combines a **Nextflow pipeline** with **Python utilities** to perform clustering, filtering, alignments, and comparative analyses of proteomes (or genomes).
+ProtClustComp combines a **Nextflow pipeline** with **Python utilities** to perform clustering, filtering, alignments and other comparative analyses of proteomes.
 
 ---
 
