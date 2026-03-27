@@ -109,7 +109,7 @@ You can organize them in subfolders (e.g. per species or per dataset) and they w
 ---
 
 ### 2. Run Pipeline
-either locally or on HPC, choosing your preferred parameters, editing the following scripts - or [running directly from command line](#pipeline-usage)
+either locally or on HPC, choosing your preferred parameters, editing the following scripts - or [running directly from command line](#command-line)
 
 #### Basic workflow
 
@@ -147,7 +147,7 @@ Run immediately without setup.
 
 ---
 
-## ⚙️ Pipeline Usage
+## Command Line
 
 Instead of the provided scripts you can for example run it on command line, e.g.:
 
