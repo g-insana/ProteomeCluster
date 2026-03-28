@@ -1,6 +1,6 @@
-# ProtClustComp - Proteome Clustering Comparison Framework
+# ProtClustComp - Proteome Clustering & Comparisons Framework
 
-Pipelines and tools for clustering, comparing, and analyzing proteomes at scale.
+Pipelines and tools for clustering, comparing and analyzing proteomes at scale.
 
 ProtClustComp combines a **Nextflow pipeline** with **Python utilities** to perform clustering, filtering, alignments and other comparative analyses of proteomes.
 
