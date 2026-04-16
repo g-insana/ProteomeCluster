@@ -1,14 +1,14 @@
-# ProtClustComp - Proteome Clustering & Comparisons Framework
+# ProteomeCluster - Proteome Clustering & Comparisons Framework
 
 Pipelines and tools for clustering, comparing and analyzing proteomes at scale.
 
-ProtClustComp combines a **Nextflow pipeline** with **Python utilities** to perform clustering, filtering, alignments and other comparative analyses of proteomes.
+ProteomeCluster combines a **Nextflow pipeline** with **Python utilities** to perform clustering, filtering, alignments and other comparative analyses of proteomes.
 
 ---
 
 ## 🚀 Overview
 
-ProtClustComp enables:
+ProteomeCluster enables:
 
 - High-performance **clustering** using MMseqs2
 - Flexible **cluster filtering and annotation**
@@ -90,7 +90,7 @@ Optional:
 ## 📥 Installation
 
 ```bash
-git clone https://github.com/g-insana/ProtClustComp.git
+git clone https://github.com/g-insana/ProteomeCluster.git
 ```
 
 ---
@@ -280,7 +280,7 @@ inspect_merge_splits.py mergesplits.tsv mapping.tsv file1.tsv file2.tsv
 
 ### Individual processes
 
-Instead of running the Nextflow pipeline you can use the individual Python scripts to execute specific steps independently. This is useful for debugging, custom workflows, or integrating ProtClustComp components into other pipelines.
+Instead of running the Nextflow pipeline you can use the individual Python scripts to execute specific steps independently. This is useful for debugging, custom workflows, or integrating ProteomeCluster components into other pipelines.
 
 Below is a brief documentation for each script. Complete documentation is available (simply click on the script name below).
 
@@ -378,7 +378,7 @@ usage: index_fastafiles.py [-h] (-i INPUT_FILE | -l LIST | -d FASTA_DIR) [-e EXT
 
 ## 📜 License
 
-ProtClustComp is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
+ProteomeCluster is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 (c) Copyright [Giuseppe Insana](https://insana.net), 2024-
 
@@ -392,6 +392,6 @@ Contributions, issues, and feature requests are welcome.
 
 ## 📌 Citation
 
-If you use ProtClustComp in your research, please consider citing this repository.
+If you use ProteomeCluster in your research, please consider citing this repository.
 
 ---
