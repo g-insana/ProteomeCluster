@@ -411,3 +411,9 @@ Bibtex:
   url          = {https://doi.org/10.5281/zenodo.20208647},
 }
 ```
+
+---
+
+## 🏗️ Used in
+
+[Early terminated transcripts and missing proteins reflect artifacts in bacterial proteomes](https://github.com/g-insana/ett_ms)
