@@ -393,6 +393,21 @@ Contributions, issues, and feature requests are welcome.
 
 ## 📌 Citation
 
-If you use ProteomeCluster in your research, please consider citing this repository.
+If you use ProteomeCluster in your research, please consider citing this repository:
+```
+Giuseppe Insana. (2026). g-insana/ProteomeCluster: Initial Release (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.20208647
+```
 
----
+Bibtex:
+```
+@software{giuseppe_insana_2026_20208647,
+  author       = {Giuseppe Insana},
+  title        = {g-insana/ProteomeCluster: Initial Release},
+  month        = may,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {v1.0.0},
+  doi          = {10.5281/zenodo.20208647},
+  url          = {https://doi.org/10.5281/zenodo.20208647},
+}
+```
