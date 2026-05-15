@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/1191165357.svg)](https://doi.org/10.5281/zenodo.20208646)
 # ProteomeCluster - Proteome Clustering & Comparisons Framework
 
 Pipelines and tools for clustering, comparing and analyzing proteomes at scale.
