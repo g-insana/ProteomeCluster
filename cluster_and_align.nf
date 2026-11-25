@@ -11,7 +11,7 @@
 //Wed 26 Nov 17:15:42 GMT 2025 0.4 filter_clusters, extract_clusters, align_clusters
 //Tue 24 Mar 21:56:08 GMT 2026 0.5 mmseqs_additional and dynamic steps choice
 //Tue 24 Mar 23:23:51 GMT 2026 0.6 create_matrix
-
+//Wed 25 Nov 16:42:09 GMT 2026 1.1 converted to strict nextflow syntax (nextflow>=26.04)
 
 //Resources parameters:
 
@@ -39,11 +39,13 @@ params.extract = false // if true, also extract clusters' sequences
 params.align = false // if true, also align clusters' sequences
 
 //mmseqs parameters
+params.mmseqs_exe = "mmseqs" //specify appropriate path to mmseqs executable, if not in $PATH
 params.covmode = 0 //0) bidirectional, 1) target coverage, 2) query coverage
 params.seq_id_mode = 0 //0: alignment length 1: shorter, 2: longer sequence
 params.coverage = 0.9 //[0.0-1.0] alignment covers at least __% of target (for cov-mode 1) or query (cov-mode 2) or both (cov-mode 0)
 params.min_seq_id = 0.9 //[0.0-1.0] as the # of identical aligned residues divided by the number of aligned columns including internal gap columns: only matches above sequence identity __%
-params.mmseqs_additional = "--clust-hash 1 --kmer-per-seq 100 --max-seqs 10000 -s 7.5 --alignment-mode 3 --sub-mat 'aa:VTML10.out,nucl:nucleotide.out' --seed-sub-mat 'aa:VTML10.out,nucl:nucleotide.out'" //additional mmseqs parameters (e.g. for more accurate recsults or higher speed)
+params.mmseqs_matrix = "${projectDir}/contrib/VTML10.out"
+params.mmseqs_additional = "--clust-hash 1 --kmer-per-seq 100 --max-seqs 10000 -s 7.5 --alignment-mode 3 --sub-mat 'aa:${params.mmseqs_matrix},nucl:nucleotide.out' --seed-sub-mat 'aa:${params.mmseqs_matrix},nucl:nucleotide.out'" //additional mmseqs parameters (e.g. for more accurate recsults or higher speed)
 //Note: MMSeqs2 automatically picks the optimal clustering strategy based on the coverage mode (--cov-mode 0 = set cover, --cov-mode 1,2 = greedy incremental); createdb-mode 1: softlink fasta
 
 //fasta files parameters
@@ -53,29 +55,32 @@ params.fasta_extension = ".fa"
 //filtering parameters (minimum number of proteomes required to be present in cluster)
 params.proteomes_threshold = 2 //default 2: keep all non singleton clusters
 
-//scripts
-mmseqs_exe = "mmseqs" //specify path to mmseqs if not in $PATH
-mmseqs_command = "easy-cluster" //alternative: easy-linclust
-label_clusters = "${projectDir}/scripts/label_clusters.py --batchsize 4000"
-filter_clusters = "${projectDir}/scripts/filter_clusters.py"
-extract_clusters = "${projectDir}/scripts/extract_clusters.py"
-align_clusters = "${projectDir}/scripts/dedup_align_fastafiles.py"
-presence_matrix = "${projectDir}/scripts/presence_matrix.py"
-fasta_indexer = "indexer.py -v -e '>' -i '^(.+\\|.*)\$' -r" //from ffdb.py
+//config and constants
+def set_config() {
+    return [
+    mmseqs_command: "easy-cluster", //alternative: easy-linclust
+    label_clusters: "${projectDir}/scripts/label_clusters.py --batchsize 4000",
+    filter_clusters: "${projectDir}/scripts/filter_clusters.py",
+    extract_clusters: "${projectDir}/scripts/extract_clusters.py",
+    align_clusters: "${projectDir}/scripts/dedup_align_fastafiles.py",
+    presence_matrix: "${projectDir}/scripts/presence_matrix.py",
+    fasta_indexer: "indexer.py -v -e '>' -i '^(.+\\|.*)\$' -r", //from ffdb.py
+    ]
+}
 
 process gather_fasta {
     // gather proteome fasta files present in given path and concatenate them
-    maxForks params.maxForks
-    cpus = 1
-    memory = '1 GB'
+    maxForks params.maxForks.toInteger()
+    cpus 1
+    memory '1 GB'
 
     tag { name }
 
     input:
-    tuple val(name), path(dir)
+    tuple val(c), val(name), path(dir)
 
     output:
-    tuple val(name), path(dir), path("${name}.fa") optional true
+    tuple val(c), val(name), path(dir), path("${name}.fa"), optional: true
 
     script:
     """
@@ -106,17 +111,17 @@ process gather_fasta {
 
 process index_fasta {
     // index fasta file; note: requires ffdb.py
-    maxForks params.maxForks
-    cpus = 1
-    memory = '1 GB'
+    maxForks params.maxForks.toInteger()
+    cpus 1
+    memory '1 GB'
 
     tag { name }
 
     input:
-    tuple val(name), path(dir), path(fastaFile)
+    tuple val(c), val(name), path(dir), path(fastaFile)
 
     output:
-    tuple val(name), path(fastaFile), path("${fastaFile}.idx")
+    tuple val(c), val(name), path(fastaFile), path("${fastaFile}.idx")
 
     script:
     """
@@ -124,7 +129,7 @@ process index_fasta {
     set -e
     echo " .-- BEGUN ${task.process} for ${name} \$(date)"
 
-    ${fasta_indexer} -f ${fastaFile} >${fastaFile}.idx
+    ${c.fasta_indexer} -f ${fastaFile} >${fastaFile}.idx
 
     echo " '-- ENDED ${task.process} \$(date)"
     """
@@ -132,17 +137,17 @@ process index_fasta {
 
 process cluster_proteomes {
     // cluster proteome fasta files present in given path
-    maxForks params.maxForks
-    cpus = params.clusterthreads
-    memory = '5 GB' //50
+    maxForks params.maxForks.toInteger()
+    cpus params.clusterthreads
+    memory '5 GB' //50
 
     tag { name }
 
     input:
-    tuple val(name), path(dir), path(fastaFile)
+    tuple val(c), val(name), path(dir), path(fastaFile)
 
     output:
-    tuple val(name), path(dir), path("${name}_protein_cluster.tsv") optional true
+    tuple val(c), val(name), path(dir), path("${name}_protein_cluster.tsv"), optional: true
 
     script:
     """
@@ -151,7 +156,7 @@ process cluster_proteomes {
     echo " .-- BEGUN ${task.process} for ${name} \$(date)"
 
     echo " |-- Starting clustering job... \$(date)"
-    command="${mmseqs_exe} ${mmseqs_command} ${fastaFile} ./_protein ./tmp --threads ${params.clusterthreads} --cov-mode ${params.covmode} --seq-id-mode ${params.seq_id_mode} --min-seq-id ${params.min_seq_id} -c ${params.coverage} --createdb-mode 1 ${params.mmseqs_additional}"
+    command="${params.mmseqs_exe} ${c.mmseqs_command} ${fastaFile} ./_protein ./tmp --threads ${params.clusterthreads} --cov-mode ${params.covmode} --seq-id-mode ${params.seq_id_mode} --min-seq-id ${params.min_seq_id} -c ${params.coverage} --createdb-mode 1 ${params.mmseqs_additional}"
 
     echo " |-- \$command"
     eval \$command
@@ -164,17 +169,17 @@ process cluster_proteomes {
 }
 
 process label_clusters {
-    maxForks params.maxForks
-    cpus = params.labelthreads
-    memory = '3 GB' //30
+    maxForks params.maxForks.toInteger()
+    cpus params.labelthreads
+    memory '3 GB' //30
 
     tag { name }
 
     input:
-    tuple val(name), path(dir), path(clusterFile)
+    tuple val(c), val(name), path(dir), path(clusterFile)
 
     output:
-    tuple val(name), path("Labelled_protein_cluster.tsv")
+    tuple val(c), val(name), path("Labelled_protein_cluster.tsv")
 
     script:
     """
@@ -182,26 +187,26 @@ process label_clusters {
     set -e
     echo " .-- BEGUN ${task.process} for ${name} \$(date)"
 
-    ${label_clusters} --fasta_dir ${dir} --input_file ${clusterFile} --out_file Labelled_protein_cluster.tsv --prefix ${params.fasta_prefix} --extension ${params.fasta_extension} -t ${params.labelthreads} --sortlabels --uniq
+    ${c.label_clusters} --fasta_dir ${dir} --input_file ${clusterFile} --out_file Labelled_protein_cluster.tsv --prefix ${params.fasta_prefix} --extension ${params.fasta_extension} -t ${params.labelthreads} --sortlabels --uniq
 
     echo " '-- ENDED ${task.process} \$(date)"
     """
 }
 
 process filter_clusters {
-    maxForks params.maxForks
-    cpus = 1
-    memory = '2 GB'
+    maxForks params.maxForks.toInteger()
+    cpus 1
+    memory '2 GB'
 
     tag { name }
 
+    publishDir "${params.outdir}", mode: 'symlink'
+
     input:
-    tuple val(name), path(labelledClustersFile)
+    tuple val(c), val(name), path(labelledClustersFile)
 
     output:
-    tuple val(name), path("${name}_clusters_m${params.proteomes_threshold}.tsv")
-
-    publishDir "${params.outdir}", mode: 'symlink'
+    tuple val(c), val(name), path("${name}_clusters_m${params.proteomes_threshold}.tsv")
 
     script:
     """
@@ -214,26 +219,26 @@ process filter_clusters {
     else
        echo " |-- keeping all protein clusters"
     fi
-    ${filter_clusters} --input_file ${labelledClustersFile} --out_file ${name}_clusters_m${params.proteomes_threshold}.tsv --minproteomes ${params.proteomes_threshold} --strict
+    ${c.filter_clusters} --input_file ${labelledClustersFile} --out_file ${name}_clusters_m${params.proteomes_threshold}.tsv --minproteomes ${params.proteomes_threshold} --strict
 
     echo " '-- ENDED ${task.process} \$(date)"
     """
 }
 
 process extract_clusters {
-    maxForks params.maxForks
-    cpus = params.extractthreads
-    memory = '2 GB' //10
+    maxForks params.maxForks.toInteger()
+    cpus params.extractthreads
+    memory '2 GB' //10
 
     tag { name }
 
+    publishDir "${params.outdir}", mode: 'symlink'
+
     input:
-    tuple val(name), path(filteredClustersFile), path(fastaFile), path(indexFile)
+    tuple val(c), val(name), path(filteredClustersFile), path(fastaFile), path(indexFile)
 
     output:
-    tuple val(name), path("${name}_clusters")
-
-    publishDir "${params.outdir}", mode: 'symlink'
+    tuple val(c), val(name), path("${name}_clusters")
 
     script:
     """
@@ -242,26 +247,26 @@ process extract_clusters {
     echo " .-- BEGUN ${task.process} for ${name} \$(date)"
 
     mkdir -p ${name}_clusters/
-    ${extract_clusters} --input_file ${filteredClustersFile} --out_dir ${name}_clusters --single_file ${fastaFile} -t ${params.extractthreads} 
+    ${c.extract_clusters} --input_file ${filteredClustersFile} --out_dir ${name}_clusters --single_file ${fastaFile} -t ${params.extractthreads} 
 
     echo " '-- ENDED ${task.process} \$(date)"
     """
 }
 
 process align_clusters {
-    maxForks params.maxForks
-    cpus = params.alignthreads
-    memory = '2 GB' //400
+    maxForks params.maxForks.toInteger()
+    cpus params.alignthreads
+    memory '2 GB' //400
 
     tag { name }
 
+    publishDir "${params.outdir}", mode: 'symlink'
+
     input:
-    tuple val(name), path(clustersDir)
+    tuple val(c), val(name), path(clustersDir)
 
     output:
-    tuple val(name), path("${name}_alignments"), path("${name}_alnwidth.tsv")
-
-    publishDir "${params.outdir}", mode: 'symlink'
+    tuple val(c), val(name), path("${name}_alignments"), path("${name}_alnwidth.tsv")
 
     script:
     """
@@ -270,7 +275,7 @@ process align_clusters {
     echo " .-- BEGUN ${task.process} for ${name} \$(date)"
 
     mkdir -p ${name}_alignments/
-    ${align_clusters} --fasta_dir ${clustersDir} --out_dir ${name}_alignments -t ${params.alignthreads} -at ${params.clustalothreads} -e .fa
+    ${c.align_clusters} --fasta_dir ${clustersDir} --out_dir ${name}_alignments -t ${params.alignthreads} -at ${params.clustalothreads} -e .fa
     for i in ${name}_alignments/*.aln; do
         clusterid=\$(basename \$i);
         echo -en "\${clusterid%%.aln}\t"; awk '{if(NR==1) {print \$0} else {if(\$0 ~ /^>/) {print "\\n"\$0} else {printf \$0}}}' \$i | head -2 | wc -L
@@ -282,19 +287,19 @@ process align_clusters {
 }
 
 process create_matrix {
-    maxForks params.maxForks
-    cpus = 1
-    memory = '2 GB'
+    maxForks params.maxForks.toInteger()
+    cpus 1
+    memory '2 GB'
 
     tag { name }
 
+    publishDir "${params.outdir}", mode: 'symlink'
+
     input:
-    tuple val(name), path(filteredClustersFile)
+    tuple val(c), val(name), path(filteredClustersFile)
 
     output:
-    tuple val(name), path("${name}_m${params.proteomes_threshold}_matrix.tsv")
-
-    publishDir "${params.outdir}", mode: 'symlink'
+    tuple val(c), val(name), path("${name}_m${params.proteomes_threshold}_matrix.tsv")
 
     script:
     """
@@ -302,13 +307,14 @@ process create_matrix {
     set -e
     echo " .-- BEGUN ${task.process} for ${name} \$(date)"
 
-    ${presence_matrix} -i ${filteredClustersFile} -p ${params.proteomesdir}/${name}.tsv -c -t -o ${name}_m${params.proteomes_threshold}_matrix.tsv
+    ${c.presence_matrix} -i ${filteredClustersFile} -p ${params.proteomesdir}/${name}.tsv -c -t -o ${name}_m${params.proteomes_threshold}_matrix.tsv
 
     echo " '-- ENDED ${task.process} \$(date)"
     """
 }
 
 workflow {
+    config = set_config()
     println "NF:Cluster and Align (author: Giuseppe Insana)"
     println "-----"
     println "CONFIGURATION:"
@@ -351,10 +357,12 @@ workflow {
     println "-----"
 
     //1) channel with subfolders of the proteomesdir (e.g. proteomesdir/ecoli, proteomesdir/spneumo)
-    Channel.fromList( file(params.proteomesdir).listFiles()
+    channel.fromList( file(params.proteomesdir).listFiles()
            .findAll{ it.isDirectory() }
            .collect{ [it.name, file(it)] } ).set{proteome_dirs_ch}
     //proteome_dirs_ch.view() //debug
+
+    proteome_dirs_ch = proteome_dirs_ch.map{ name, dir -> tuple(config, name, dir) }
 
     //2) concatenate proteomes' fasta files
     proteome_dirs_ch | gather_fasta
@@ -375,7 +383,21 @@ workflow {
 
     //7) extract clusters
     if(params.extract || params.align) {
-        filter_clusters.out.combine(index_fasta.out, by: 0).set{ extract_ch }
+        def clusters_by_name = filter_clusters.out.map {
+            c, name, labelledClustersFile ->
+            tuple(name, labelledClustersFile)
+        }
+        def index_by_name = index_fasta.out.map {
+            c, name, fastaFile, indexFile ->
+            tuple(name, fastaFile, indexFile)
+        }
+        def extract_ch = clusters_by_name
+            .combine(index_by_name, by: 0)
+
+        //extract_ch.view() //debug
+        extract_ch = extract_ch.map { name, labelledClustersFile, fastaFile, indexFile ->
+            tuple(config, name, labelledClustersFile, fastaFile, indexFile)
+        }
         extract_ch | extract_clusters
     }
 

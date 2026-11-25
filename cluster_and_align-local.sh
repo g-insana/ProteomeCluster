@@ -21,5 +21,5 @@ nextflow run cluster_and_align.nf \
   --maxForks 1 \
   --extract \
   --align \
-  -profile local -resume
+  -profile local -resume $@
 

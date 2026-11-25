@@ -19,5 +19,4 @@ nextflow run cluster_and_align.nf \
   --proteomes_threshold 3 \
   --clusterthreads 1 --labelthreads 1 --extractthreads 1 --alignthreads 1 --clustalothreads 1 \
   --maxForks 1 \
-  -profile local -resume
-
+  -profile local -resume $@
