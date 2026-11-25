@@ -1,25 +1,34 @@
-//NextFlow example pipeline to cluster proteomes (located in subfolders) via mmseqs2, extract cluster sequences and align those.
-//Steps are optional. For example comment out steps 5&6 of the workflow if you are only interested in clustering proteomes and removing singletons, with no need for (optionally aligned) cluster sequences.
+/*
+NextFlow example pipeline to cluster proteomes (located in subfolders) via mmseqs2, create representative fasta, extract cluster sequences and align them.
 
-//NOTE: you may need to adapt script to your fasta headers or use proteome files with fasta headers like
-//>IDENTIFIER|SEQLEN
+Steps are optional and controlled by command line parameters.
 
-//Changelog:
-//Sun  9 Nov 21:28:47 GMT 2025 0.1 started, gather_fasta
-//Mon 10 Nov 08:52:21 GMT 2025 0.2 index_fasta
-//Sun 23 Nov 19:03:12 GMT 2025 0.3 cluster_proteomes, label_clusters
-//Wed 26 Nov 17:15:42 GMT 2025 0.4 filter_clusters, extract_clusters, align_clusters
-//Tue 24 Mar 21:56:08 GMT 2026 0.5 mmseqs_additional and dynamic steps choice
-//Tue 24 Mar 23:23:51 GMT 2026 0.6 create_matrix
-//Wed 25 Nov 16:42:09 GMT 2026 1.1 converted to strict nextflow syntax (nextflow>=26.04)
+NOTE: you may need to adapt script to your fasta headers or use proteome files with fasta headers like
+>IDENTIFIER|SEQLEN
+or
+>IDENTIFIER|SEQLEN|UPI
+/*
 
-//Resources parameters:
+/* Changelog:
+Sun  9 Nov 21:28:47 GMT 2025 0.1 started, gather_fasta
+Mon 10 Nov 08:52:21 GMT 2025 0.2 index_fasta
+Sun 23 Nov 19:03:12 GMT 2025 0.3 cluster_proteomes, label_clusters
+Wed 26 Nov 17:15:42 GMT 2025 0.4 filter_clusters, extract_clusters, align_clusters
+Tue 24 Mar 21:56:08 GMT 2026 0.5 mmseqs_additional and dynamic steps choice
+Tue 24 Mar 23:23:51 GMT 2026 0.6 create_matrix
+Wed 25 Nov 16:42:09 GMT 2026 1.1 converted to strict nextflow syntax (nextflow>=26.04)
+Wed 25 Nov 17:26:11 GMT 2026 1.2 added create_repr
+*/
 
-//job requirements to work with a species of ~20k bacterial proteomes:
-//30G mem & 16 cpus for Labeller jobs
-//230Gb mem & 32 cpus for mmseqs jobs
+/* Resources parameters:
 
-//for testing purposes:
+job requirements to work with a species of ~20k bacterial proteomes:
+30G mem & 16 cpus for Labeller jobs
+230Gb mem & 32 cpus for mmseqs jobs
+
+*/
+
+//for testing purposes (increase as needed):
 params.clusterthreads = 2
 params.labelthreads = 2
 params.extractthreads = 2
@@ -35,7 +44,8 @@ params.proteomesdir = "${projectDir}/proteomes/"
 params.outdir = "${projectDir}/outdir/"
 
 //behaviour (steps to perform)
-params.extract = false // if true, also extract clusters' sequences
+params.repr = true // if true, extract clusters' representative sequences
+params.extract = false // if true, extract all clusters' sequences
 params.align = false // if true, also align clusters' sequences
 
 //mmseqs parameters
@@ -65,6 +75,7 @@ def set_config() {
     align_clusters: "${projectDir}/scripts/dedup_align_fastafiles.py",
     presence_matrix: "${projectDir}/scripts/presence_matrix.py",
     fasta_indexer: "indexer.py -v -e '>' -i '^(.+\\|.*)\$' -r", //from ffdb.py
+    fasta_extractor: "extractor.py -v", //from ffdb.py
     ]
 }
 
@@ -225,6 +236,36 @@ process filter_clusters {
     """
 }
 
+process create_representatives {
+    maxForks params.maxForks.toInteger()
+    cpus params.extractthreads
+    memory '2 GB' //10
+
+    tag { name }
+
+    publishDir "${params.outdir}", mode: 'symlink'
+
+    input:
+    tuple val(c), val(name), path(filteredClustersFile), path(fastaFile), path(indexFile)
+
+    output:
+    tuple val(c), val(name), path("${name}_repr.fa")
+
+    script:
+    """
+    set -u
+    set -e
+    echo " .-- BEGUN ${task.process} for ${name} \$(date)"
+
+    mkdir -p ${name}_clusters/
+    tail -n +2 ${filteredClustersFile} | cut -f 5 >repr.ids
+    ${c.fasta_extractor} -f ${fastaFile} -i ${indexFile} -l repr.ids >${name}_repr.fa
+    rm repr.ids
+
+    echo " '-- ENDED ${task.process} \$(date)"
+    """
+}
+
 process extract_clusters {
     maxForks params.maxForks.toInteger()
     cpus params.extractthreads
@@ -354,6 +395,9 @@ workflow {
         log.info "MAIN: cluster -> label -> filter"
         log.info "PLUS: create_matrix"
     }
+    if(params.repr) {
+        log.info "ALSO: create_repr"
+    }
     println "-----"
 
     //1) channel with subfolders of the proteomesdir (e.g. proteomesdir/ecoli, proteomesdir/spneumo)
@@ -368,7 +412,7 @@ workflow {
     proteome_dirs_ch | gather_fasta
 
     //3) index input fasta files
-    if(params.extract || params.align) {
+    if(params.extract || params.align || params.repr) {
         gather_fasta.out | index_fasta
     }
 
@@ -381,8 +425,7 @@ workflow {
     //6) create presence/absence/count matrix
     filter_clusters.out | create_matrix
 
-    //7) extract clusters
-    if(params.extract || params.align) {
+    if(params.extract || params.align || params.repr) {
         def clusters_by_name = filter_clusters.out.map {
             c, name, labelledClustersFile ->
             tuple(name, labelledClustersFile)
@@ -393,16 +436,23 @@ workflow {
         }
         def extract_ch = clusters_by_name
             .combine(index_by_name, by: 0)
-
-        //extract_ch.view() //debug
         extract_ch = extract_ch.map { name, labelledClustersFile, fastaFile, indexFile ->
             tuple(config, name, labelledClustersFile, fastaFile, indexFile)
         }
-        extract_ch | extract_clusters
-    }
 
-    //8) align clusters
-    if(params.align) {
-        extract_clusters.out | align_clusters
+        //7) create fasta file with sequences of mmseqs cluster representatives
+        if(params.repr) {
+            extract_ch | create_representatives
+        }
+
+        //8) extract clusters
+        if (params.extract || params.align) {
+            extract_ch | extract_clusters
+        }
+
+        //9) align clusters
+        if(params.align) {
+            extract_clusters.out | align_clusters
+        }
     }
 }
