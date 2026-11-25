@@ -44,7 +44,7 @@ params.proteomesdir = "${projectDir}/proteomes/"
 params.outdir = "${projectDir}/outdir/"
 
 //behaviour (steps to perform)
-params.repr = true // if true, extract clusters' representative sequences
+params.repr = false // if true, extract clusters' representative sequences
 params.extract = false // if true, extract all clusters' sequences
 params.align = false // if true, also align clusters' sequences
 
