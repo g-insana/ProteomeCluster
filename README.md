@@ -13,6 +13,7 @@ ProteomeCluster enables:
 
 - High-performance **clustering** using MMseqs2
 - Flexible **cluster filtering and annotation**
+- Optional **creation of representatives FASTA file**
 - Optional **sequence extraction and multiple alignment**
 - Advanced **comparison of clustering strategies**
 - Exploration of **merge/split cluster events**
@@ -41,6 +42,15 @@ The single processes can also be run independently via the provided python scrip
 - `*_matrix.tsv`
   - presence absence matrix with row and column counts
 
+### 🔹 Medium Workflow
+
+- Extract the sequence of mmseqs clusters' representatives
+
+**Outputs:**
+
+- `*_repr.fa`
+  - FASTA file with the representatives' sequences
+   
 ---
 
 ### 🔹 Extended Workflow
@@ -52,8 +62,8 @@ Optional downstream processing after clustering:
 
 **Outputs:**
 
-- Cluster FASTA files
-- Cluster alignment files
+- Cluster FASTA files (one per cluster)
+- Cluster alignment files (one per cluster)
 
 ---
 
@@ -76,7 +86,7 @@ Compare different clustering runs (e.g. parameter tuning):
 ## 📦 Requirements
 
 - [MMseqs2](https://github.com/soedinglab/MMseqs2)
-- [Nextflow](https://www.nextflow.io/)
+- [Nextflow](https://www.nextflow.io/) >
 - Python ≥ 3.8
 
 Optional:
@@ -118,6 +128,14 @@ either locally or on HPC, choosing your preferred parameters, editing the follow
 ./cluster_only-local.sh
 ./cluster_only-slurm.sh
 ```
+
+#### Medium workflow
+
+```bash
+./cluster_and_repr-local.sh
+./cluster_and_repr-slurm.sh
+```
+
 
 #### Extended workflow
 
@@ -183,7 +201,8 @@ See full list of parameters below in the [Documentation](#-documentation) sectio
 | `--proteomesdir` | Input proteome directory |
 | `--outdir` | Output directory |
 | `--proteomes_threshold` | Minimum proteomes per cluster |
-| `--extract` | Extract sequences |
+| `--repr` | Extract representatives' sequences |
+| `--extract` | Extract all clusters' sequences |
 | `--align` | Perform alignments |
 
 ---
@@ -196,6 +215,7 @@ See full list of parameters below in the [Documentation](#-documentation) sectio
 | `--coverage` | Minimum alignment coverage (0–1) |
 | `--min_seq_id` | Minimum sequence identity (0–1) |
 | `--seq_id_mode` | Identity calculation mode |
+| `--mmseqs_exe` | Path to MMseqs2 executable if not in $PATH |
 
 ---
 
