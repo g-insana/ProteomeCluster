@@ -417,3 +417,4 @@ Bibtex:
 ## 🏗️ Used in
 
 - Early terminated transcripts and missing proteins reflect artifacts in bacterial proteomes - Github: [ett_ms](https://github.com/g-insana/ett_ms) - Manuscript: doi[10.1093/nargab/lqag129](https://doi.org/10.1093/nargab/lqag129) PMID[42991537](https://pubmed.ncbi.nlm.nih.gov/42991537/)
+- UniProt Pan-Proteomes - [Docs](https://www.uniprot.org/help/pan_proteomes) - Latest data: [ftp](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/pan_proteomes/) - Initial release: [10.5281/zenodo.23163531](https://doi.org/10.5281/zenodo.23163531)
