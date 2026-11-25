@@ -102,10 +102,10 @@ git clone https://github.com/g-insana/ProteomeCluster.git
 
 Place proteome FASTA files under:
 ```
-proteomesdir/
+proteomes/
 ```
 
-You can organize them in subfolders (e.g. per species or per dataset) and they will be processed in parallel.
+You can organize them in subfolders (e.g. per species or per dataset) and they will be processed in parallel. A small test dataset is already provided in that folder.
 
 ---
 
