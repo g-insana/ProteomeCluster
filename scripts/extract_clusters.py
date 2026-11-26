@@ -8,6 +8,8 @@
 # Sun 16 Feb 22:04:17 GMT 2026 1.5 added --web for web retrieval, including sequence cache
 # Wed 18 Feb 12:33:09 GMT 2026 1.6 added --uniqterse
 # Wed 18 Feb 17:51:55 GMT 2026 1.7 count of duplicated sequences placed in header when using --uniqterse
+# Thu 26 Nov 08:46:05 GMT 2026 1.8 added -g repr
+# Thu 26 Nov 09:07:12 GMT 2026 1.9 added -g mode
 
 # imports
 import os
@@ -322,6 +324,16 @@ def check_args():
         help="Optionally specify which cluster(s) to extract, by cluster_id (multiple cluster_id can be specified, space separated)",
     )
 
+    #Extraction behaviour
+    parser.add_argument(
+        "-g",
+        "--goal",
+        choices=['all', 'repr', 'mode'],
+        required=False,
+        default="all",
+        help="Objective of the extraction: [all] sequences in all clusters (default); only mmseqs [repr]esentatives of each cluster; one [mode] length protein per cluster"
+    )
+
     # Optional arguments:
     parser.add_argument(
         "-p",
@@ -401,17 +413,30 @@ def check_args():
             exit_with_error(f"ERROR: Cannot create directory '{args.out_dir}'", 1)
 
     eprint(f" |-- out_dir: {args.out_dir}/")
+    if args.goal in ["repr", "mode"]:
+        eprint(f" |-- output file: {args.out_dir}/{args.goal}.fa")
+
     if args.cluster is not None:
         if len(args.cluster) == 1 and " " in args.cluster[0]:
             args.cluster = args.cluster[0].split(" ")
         eprint(f" |-- cluster(s) to extract: {' '.join(args.cluster)}")
-    eprint(f" |-- min proteins threshold: {args.minproteins}")
+    if args.goal in ["repr", "mode"]:
+        eprint(f" |-- [IGNORED] min proteins threshold: {args.minproteins}")
+    else:
+        eprint(f" |-- min proteins threshold: {args.minproteins}")
+
+    if args.restrict:
+        eprint(f" |-- restrict list: {args.restrict}")
 
     if args.threads > cpu_count():
         args.threads = cpu_count()
         eprint(f" |-- WARNING: only {args.threads} threads available")
 
     if args.threads > 1:
+        if args.goal in ["repr", "mode"]:
+            exit_with_error(
+                f"ERROR: option --threads not compatible with --goal repr or mode", 22
+            )
         args.chunksize = calculate_blocksize(args.input_file, args.threads)
         eprint(
             f" |-- threads: {args.threads}; input file will be split in chunks of max {args.chunksize} bytes"
@@ -423,13 +448,22 @@ def check_args():
         )
 
     if args.uniq:
-        eprint(f" |-- extracting only unique sequences, merging identifiers")
+        if args.goal in ["repr", "mode"]:
+            eprint(f" |-- [IGNORED] extracting only unique sequences, merging identifiers")
+        else:
+            eprint(f" |-- extracting only unique sequences, merging identifiers")
     elif args.uniqterse:
-        eprint(
-            f" |-- extracting only unique sequences, under the first seen identifier"
-        )
+        if args.goal in ["repr", "mode"]:
+            eprint(f" |-- removing proteome identifiers")
+        else:
+            eprint(
+                f" |-- extracting only unique sequences, under the first seen identifier"
+            )
     if args.allproteomes:
-        eprint(f" |-- keeping all proteome tags in header")
+        if args.goal in ["repr", "mode"]:
+            eprint(f" |-- [IGNORED] keeping all proteome tags in header")
+        else:
+            eprint(f" |-- keeping all proteome tags in header")
 
     return args
 
@@ -611,6 +645,7 @@ def extract_clusters(args):
     progress = args.progress
     allproteomes = args.allproteomes
     clusterslist = args.cluster
+    goal = args.goal
 
     protein_count = 0  # number of total proteins
     cluster_count = 0  # number of total clusters
@@ -624,24 +659,66 @@ def extract_clusters(args):
         pbar = tqdm(total=input_file_size, unit="B", position=args.pbar_position)
 
     with open(input_file, "r") as input_fh:
+        if goal in ["repr", "mode"]:
+            out_clusterfile = os.path.join(out_dir, goal + ".fa")
+            if not args.force and os.path.isfile(out_clusterfile):
+                exit_with_error(
+                    f"ERROR: Cowardly refusing to overwrite already existing file '{out_clusterfile}'. Use --force to force overwriting.", 17
+                )
+            output_fh = open(out_clusterfile, "w") #init output file
         for line in input_fh:  # for each cluster
             if progress:
                 pbar.update(len(line))
-            columns = line.rstrip("\n").split("\t", maxsplit=2)
-            cluster_id, proteins_string = columns[0:2]
+            columns = line.rstrip("\n").split("\t")
+            cluster_id = columns[0]
             if cluster_id == "cluster_id":
                 # skip header
                 continue
+            proteins_string = columns[1]
+            representative = columns[4]
+            seqlen_mode = columns[6]
+            no_mode = '.' in seqlen_mode #if seqlen_mode is a float then it is median, not mode
+            seqlen_mode = float(seqlen_mode)
+            median_deviation = 1000000000000 #to find the entry closest to median
+            closest_to_median = None
             cluster_count += 1
             protein2proteomes = {}
             for pair in proteins_string.split(" "):
                 proteome_id, protein_id = pair.split(":", 1)
-                if protein_id in protein2proteomes:
-                    protein2proteomes[protein_id].append(proteome_id)
+                if goal == "all":
+                    if protein_id in protein2proteomes:
+                        protein2proteomes[protein_id].append(proteome_id)
+                    else:
+                        protein2proteomes[protein_id] = [proteome_id]
+                elif goal == "repr":
+                    if protein_id == representative:
+                        protein2proteomes[protein_id] = [proteome_id]
+                        break
+                elif goal == "mode":
+                    parts = protein_id.split("|")
+                    seqlen = int(parts[1]) #seqlen assumed to be second element of protein_id
+                    if no_mode:
+                        #then seqlen_mode is median and we choose entry with seqlen closest to it
+                        this_deviation = abs(seqlen - seqlen_mode)
+                        if this_deviation < median_deviation:
+                            closest_to_median = proteome_id + ":" + protein_id
+                            median_deviation = this_deviation
+                            #eprint(f"[{cluster_id}] found sequence with deviation {this_deviation} from {seqlen_mode}") #debug
+                            #we continue checking so we ensure we get the one closest to median
+                    else:
+                        #choose the first entry with seqlen == seqlen_mode
+                        if seqlen == seqlen_mode:
+                            protein2proteomes[protein_id] = [proteome_id]
+                            break
                 else:
-                    protein2proteomes[protein_id] = [proteome_id]
+                    exit_with_error(f"ERROR: xkcd #2200 unreachable state: goal={goal}", 22)
+            if goal == "mode" and no_mode:
+                #we select the one found closest to the mode
+                proteome_id, protein_id = closest_to_median.split(":", 1)
+                protein2proteomes[protein_id] = [proteome_id]
 
-            # eprint(f"collected the following protein2proteomes matches for cluster #{cluster_id}: {protein2proteomes}") #debug
+
+            #eprint(f"collected the following protein2proteomes matches for cluster #{cluster_id}: {protein2proteomes}") #debug
             this_line_proteins = len(protein2proteomes)
             protein_count += this_line_proteins
             if clusterslist is not None and cluster_id not in clusterslist:
@@ -649,18 +726,19 @@ def extract_clusters(args):
                 # eprint(f"skipping cluster {cluster_id} as not requested") # debug
                 continue
             if (
-                this_line_proteins < min_threshold
+                goal == "all" and this_line_proteins < min_threshold
             ):  # we skip if lower than the threshold
                 # eprint(f"skipping cluster {cluster_id} as it has contains less proteins than {min_threshold}")  # debug
                 continue
 
             # check if cluster file already present
-            out_clusterfile = os.path.join(out_dir, cluster_id + ".fa")
-            if not args.force and os.path.isfile(out_clusterfile):
-                eprint(
-                    f"Cowardly refusing to overwrite already existing file '{out_clusterfile}'. Use --force to force overwriting."
-                )  # debug
-                continue
+            if goal == "all":
+                out_clusterfile = os.path.join(out_dir, cluster_id + ".fa")
+                if not args.force and os.path.isfile(out_clusterfile):
+                    eprint(
+                        f"Cowardly refusing to overwrite already existing file '{out_clusterfile}'. Use --force to force overwriting."
+                    )  # debug
+                    continue
 
             # reset dicts
             protein2sequence = {}
@@ -727,38 +805,44 @@ def extract_clusters(args):
 
             # print found sequences
             if len(protein2sequence):
-                with open(out_clusterfile, "w") as output_fh:
-                    created_clusterfiles_count += 1
-                    for protein_id, sequence in protein2sequence.items():
-                        printed_sequences_count += 1
+                if goal == "all":
+                    output_fh = open(out_clusterfile, open_mode)
+                created_clusterfiles_count += 1
+                for protein_id, sequence in protein2sequence.items():
+                    printed_sequences_count += 1
+                    if (
+                        uniq
+                    ):  # merged identifiers in header if multiple proteins with same sequence
+                        identifiers = " ".join(
+                            [
+                                found_protein2proteome[protein_id]
+                                + ":"
+                                + protein_id
+                                for protein_id in proteinid_synonyms.get(
+                                    protein_id, protein_id
+                                ).split(" ")
+                            ]
+                        )
+                        output_fh.write(f">{identifiers}\n{sequence}\n")
+                    elif uniqterse:
                         if (
-                            uniq
-                        ):  # merged identifiers in header if multiple proteins with same sequence
-                            identifiers = " ".join(
-                                [
-                                    found_protein2proteome[protein_id]
-                                    + ":"
-                                    + protein_id
-                                    for protein_id in proteinid_synonyms.get(
-                                        protein_id, protein_id
-                                    ).split(" ")
-                                ]
-                            )
-                            output_fh.write(f">{identifiers}\n{sequence}\n")
-                        elif uniqterse:
-                            if (
-                                protein_id in proteinid_synonyms
-                                and " " in proteinid_synonyms[protein_id]
-                            ):
-                                multiple = f"({len(proteinid_synonyms[protein_id].split(' '))})"
-                            else:
-                                multiple = ""
-                            output_fh.write(f">{protein_id}{multiple}\n{sequence}\n")
+                            protein_id in proteinid_synonyms
+                            and " " in proteinid_synonyms[protein_id]
+                        ):
+                            multiple = f"({len(proteinid_synonyms[protein_id].split(' '))})"
                         else:
-                            output_fh.write(
-                                f">{found_protein2proteome[protein_id]}:{protein_id}\n{sequence}\n"
-                            )
-                # eprint(f"created {out_clusterfile} fasta file") #debug
+                            multiple = ""
+                        output_fh.write(f">{protein_id}{multiple}\n{sequence}\n")
+                    else:
+                        output_fh.write(
+                            f">{found_protein2proteome[protein_id]}:{protein_id}\n{sequence}\n"
+                        )
+                if goal == "all":
+                    output_fh.close()
+                    #eprint(f"created {out_clusterfile} fasta file") #debug
+
+    if goal in ["repr", "mode"]:
+        output_fh.close()
 
     if progress:
         pbar.close()

@@ -1,10 +1,14 @@
-N E X T F L O W  ~  version 23.04.1
-Launching `cluster_and_align.nf` [gloomy_perlman] DSL2 - revision: bbbd3e0abd
+[33mNextflow 26.10.7 is available - Please consider updating your version to it[m
+
+ N E X T F L O W   ~  version 26.04.0
+
+Launching `cluster_and_align.nf` [nostalgic_cajal] revision: 265aa4be9e
+
 NF:Cluster and Align (author: Giuseppe Insana)
 -----
 CONFIGURATION:
-proteomesdir: /homes/insana/proteomescomparisons/github/proteomes/
-outdir: /homes/insana/proteomescomparisons/github/outdir/
+proteomesdir: /homes/insana/mywork/261125proteomeclusterupdate/github/proteomes/
+outdir: /homes/insana/mywork/261125proteomeclusterupdate/github/outdir/
 -----
 covmode: 0
 coverage: 0.9
@@ -16,86 +20,212 @@ fasta_extension: .fa
 -----
 proteomes_threshold: 3
 -----
-MAIN: cluster -> label -> filter -> extract -> align
-PLUS: index, create_matrix
+MAIN: cluster -> label -> filter
+PLUS: create_matrix
+ALSO: create_repr
 -----
-[-        ] process > gather_fasta      -
-[-        ] process > index_fasta       -
-[-        ] process > cluster_proteomes -
-[-        ] process > label_clusters    -
-[-        ] process > filter_clusters   -
-[-        ] process > create_matrix     -
+[-        ] gather_fasta           -
+[-        ] index_fasta            -
+[-        ] cluster_proteomes      -
+[-        ] label_clusters         -
+[-        ] filter_clusters        -
+[-        ] create_matrix          -
+[-        ] create_representatives -
 
-[8d/36c546] process > gather_fasta (ecoli)      [100%] 2 of 2, cached: 2 ✔
-[8f/8254a0] process > index_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
-[6a/cf414d] process > cluster_proteomes (ecoli) [100%] 2 of 2, cached: 2 ✔
-[88/ed7452] process > label_clusters (ecoli)    [100%] 1 of 1, cached: 1
-[-        ] process > filter_clusters           -
-[-        ] process > create_matrix             -
-[-        ] process > extract_clusters          -
-[-        ] process > align_clusters            -
-
-[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
-[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
-[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
-[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
-[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
-[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
-[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
-[-        ] process > align_clusters             -
-
-[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
-[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
-[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
-[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
-[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
-[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
-[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
-[-        ] process > align_clusters             [  0%] 0 of 2
+executor >  slurm (1)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)      | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)     | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/1f/6d1ff654d81eb1c08ea7f0c08a7fe61f/6d1ff6] cluster_proteomes (ecoli) | 0 of 2
+[-        ] label_clusters            -
+[-        ] filter_clusters           -
+[-        ] create_matrix             -
+[-        ] create_representatives    -
 
 executor >  slurm (2)
-[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
-[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
-[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
-[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
-[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
-[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
-[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
-[90/970f63] process > align_clusters (ecoli)     [  0%] 0 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)        | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)       | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo) | 0 of 2
+[-        ] label_clusters              -
+[-        ] filter_clusters             -
+[-        ] create_matrix               -
+[-        ] create_representatives      -
 
 executor >  slurm (2)
-[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
-[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
-[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
-[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
-[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
-[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
-[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
-[90/970f63] process > align_clusters (ecoli)     [  0%] 0 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)        | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)       | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo) | 0 of 2
+[-        ] label_clusters              -
+[-        ] filter_clusters             -
+[-        ] create_matrix               -
+[-        ] create_representatives      -
 
-executor >  slurm (2)
-[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
-[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
-[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
-[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
-[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
-[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
-[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
-[b9/c53067] process > align_clusters (spneumo)   [ 50%] 1 of 2
+executor >  slurm (3)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)        | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)       | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo) | 1 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/11/4e4e852fc714c536878b38d17b18e611/4e4e85] label_clusters (spneumo)    | 0 of 1
+[-        ] filter_clusters             -
+[-        ] create_matrix               -
+[-        ] create_representatives      -
 
-executor >  slurm (2)
-[8d/36c546] process > gather_fasta (ecoli)       [100%] 2 of 2, cached: 2 ✔
-[8f/8254a0] process > index_fasta (ecoli)        [100%] 2 of 2, cached: 2 ✔
-[6a/cf414d] process > cluster_proteomes (ecoli)  [100%] 2 of 2, cached: 2 ✔
-[b8/40f51e] process > label_clusters (spneumo)   [100%] 2 of 2, cached: 2 ✔
-[4c/209a2b] process > filter_clusters (spneumo)  [100%] 2 of 2, cached: 2 ✔
-[78/1ee698] process > create_matrix (ecoli)      [100%] 2 of 2, cached: 2 ✔
-[eb/1bfcd9] process > extract_clusters (spneumo) [100%] 2 of 2, cached: 2 ✔
-[90/970f63] process > align_clusters (ecoli)     [100%] 2 of 2 ✔
-Completed at: 25-Mar-2026 00:08:20
-Duration    : 4m 48s
-CPU hours   : 0.2 (40.9% cached)
-Succeeded   : 2
-Cached      : 14
+executor >  slurm (4)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)        | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)       | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo) | 1 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/11/4e4e852fc714c536878b38d17b18e611/4e4e85] label_clusters (spneumo)    | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/c4/55706ec5b05433505ef356e7a67436c4/55706e] filter_clusters (spneumo)   | 0 of 1
+[-        ] create_matrix               -
+[-        ] create_representatives      -
 
+executor >  slurm (6)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)           | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)          | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo)    | 1 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/11/4e4e852fc714c536878b38d17b18e611/4e4e85] label_clusters (spneumo)       | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/c4/55706ec5b05433505ef356e7a67436c4/55706e] filter_clusters (spneumo)      | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4a/cf68d231c5102ee5822dd768cb416a4a/cf68d2] create_matrix (spneumo)        | 0 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a4384f/4d9489] cre…_representatives (spneumo) | 0 of 1
+
+executor >  slurm (6)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)           | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)          | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo)    | 1 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/11/4e4e852fc714c536878b38d17b18e611/4e4e85] label_clusters (spneumo)       | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/c4/55706ec5b05433505ef356e7a67436c4/55706e] filter_clusters (spneumo)      | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4a/cf68d231c5102ee5822dd768cb416a4a/cf68d2] create_matrix (spneumo)        | 0 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a4384f/4d9489] cre…_representatives (spneumo) | 0 of 1
+
+executor >  slurm (6)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)           | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)          | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo)    | 1 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/11/4e4e852fc714c536878b38d17b18e611/4e4e85] label_clusters (spneumo)       | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/c4/55706ec5b05433505ef356e7a67436c4/55706e] filter_clusters (spneumo)      | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4a/cf68d231c5102ee5822dd768cb416a4a/cf68d2] create_matrix (spneumo)        | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a4384f/4d9489] cre…_representatives (spneumo) | 0 of 1
+ERROR ~ Error executing process > 'create_representatives (spneumo)'
+
+Caused by:
+  Process `create_representatives (spneumo)` terminated with an error exit status (1)
+
+
+Command executed:
+
+  set -u
+  set -e
+  echo " .-- BEGUN create_representatives for spneumo $(date)"
+  
+  /gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/scripts/extract_clusters.py --input_file spneumo_clusters_m3.tsv --out_dir spneumo_clusters --single_file spneumo.fa -t 1 -g repr
+  mv spneumo_clusters/repr.fa spneumo_repr.fa
+  
+  echo " '-- ENDED create_representatives $(date)"
+
+Command exit status:
+  1
+
+Command output:
+   .-- BEGUN create_representatives for spneumo Thu 26 Nov 08:23:13 GMT 2026
+
+Command error:
+    File "/gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/scripts/extract_clusters.py", line 643
+      )  # debug
+      ^
+  SyntaxError: unmatched ')'
+
+Work dir:
+  /gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a438
+
+Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
+
+ -- Check '.nextflow.log' file for details
+
+executor >  slurm (6)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)           | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)          | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/56/e2e0a883542faf134fb81e4c49728956/e2e0a8] cluster_proteomes (spneumo)    | 1 of 2
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/11/4e4e852fc714c536878b38d17b18e611/4e4e85] label_clusters (spneumo)       | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/c4/55706ec5b05433505ef356e7a67436c4/55706e] filter_clusters (spneumo)      | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4a/cf68d231c5102ee5822dd768cb416a4a/cf68d2] create_matrix (spneumo)        | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a4384f/4d9489] cre…_representatives (spneumo) | 0 of 1 ✘
+Execution cancelled -- Finishing pending tasks before exit
+ERROR ~ Error executing process > 'create_representatives (spneumo)'
+
+Caused by:
+  Process `create_representatives (spneumo)` terminated with an error exit status (1)
+
+
+Command executed:
+
+  set -u
+  set -e
+  echo " .-- BEGUN create_representatives for spneumo $(date)"
+  
+  /gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/scripts/extract_clusters.py --input_file spneumo_clusters_m3.tsv --out_dir spneumo_clusters --single_file spneumo.fa -t 1 -g repr
+  mv spneumo_clusters/repr.fa spneumo_repr.fa
+  
+  echo " '-- ENDED create_representatives $(date)"
+
+Command exit status:
+  1
+
+Command output:
+   .-- BEGUN create_representatives for spneumo Thu 26 Nov 08:23:13 GMT 2026
+
+Command error:
+    File "/gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/scripts/extract_clusters.py", line 643
+      )  # debug
+      ^
+  SyntaxError: unmatched ')'
+
+Work dir:
+  /gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a438
+
+Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
+
+ -- Check '.nextflow.log' file for details
+
+executor >  slurm (6)
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/7d/405f1560f84f068dd35abc239853f87d/405f15] gather_fasta (ecoli)           | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/82/a38695084fb4db92ffa680a97fe89d82/a38695] index_fasta (spneumo)          | 2 of 2, cached: 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/1f/6d1ff654d81eb1c08ea7f0c08a7fe61f/6d1ff6] cluster_proteomes (ecoli)      | 2 of 2 ✔
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/11/4e4e852fc714c536878b38d17b18e611/4e4e85] label_clusters (spneumo)       | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/c4/55706ec5b05433505ef356e7a67436c4/55706e] filter_clusters (spneumo)      | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4a/cf68d231c5102ee5822dd768cb416a4a/cf68d2] create_matrix (spneumo)        | 1 of 1
+[]8;;file:///gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a4384f/4d9489] cre…_representatives (spneumo) | 0 of 1 ✘
+Execution cancelled -- Finishing pending tasks before exit
+ERROR ~ Error executing process > 'create_representatives (spneumo)'
+
+Caused by:
+  Process `create_representatives (spneumo)` terminated with an error exit status (1)
+
+
+Command executed:
+
+  set -u
+  set -e
+  echo " .-- BEGUN create_representatives for spneumo $(date)"
+  
+  /gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/scripts/extract_clusters.py --input_file spneumo_clusters_m3.tsv --out_dir spneumo_clusters --single_file spneumo.fa -t 1 -g repr
+  mv spneumo_clusters/repr.fa spneumo_repr.fa
+  
+  echo " '-- ENDED create_representatives $(date)"
+
+Command exit status:
+  1
+
+Command output:
+   .-- BEGUN create_representatives for spneumo Thu 26 Nov 08:23:13 GMT 2026
+
+Command error:
+    File "/gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/scripts/extract_clusters.py", line 643
+      )  # debug
+      ^
+  SyntaxError: unmatched ')'
+
+Work dir:
+  /gpfs/production/martin/uniprot/users/insana/proteomescomparisons/github/work/4f/4d9489fe0c6494e02533d19993a438
+
+Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
+
+ -- Check '.nextflow.log' file for details
 

@@ -21,6 +21,7 @@ command="nextflow run cluster_and_align.nf \
   --clusterthreads 1 --labelthreads 1 --extractthreads 1 --alignthreads 1 --clustalothreads 1 \
   --maxForks 10 \
   --repr \
+  --mode \
   -profile prod -resume $@"
 
 sbatch --mem=2G --time=1-0 -p production --ntasks=1 --cpus-per-task=1 --nodes=1 --mail-type=FAIL,END --mail-user=$USER -J "cluster_and_align" -o "cluster_and_align.out" --wrap="$command"

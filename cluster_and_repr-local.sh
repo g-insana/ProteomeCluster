@@ -20,4 +20,5 @@ nextflow run cluster_and_align.nf \
   --clusterthreads 1 --labelthreads 1 --extractthreads 1 --alignthreads 1 --clustalothreads 1 \
   --maxForks 1 \
   --repr \
+  --mode \
   -profile local -resume $@

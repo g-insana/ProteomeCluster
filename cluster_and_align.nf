@@ -18,6 +18,7 @@ Tue 24 Mar 21:56:08 GMT 2026 0.5 mmseqs_additional and dynamic steps choice
 Tue 24 Mar 23:23:51 GMT 2026 0.6 create_matrix
 Wed 25 Nov 16:42:09 GMT 2026 1.1 converted to strict nextflow syntax (nextflow>=26.04)
 Wed 25 Nov 17:26:11 GMT 2026 1.2 added create_repr
+Thu 26 Nov 09:10:15 GMT 2026 1.3 refactored create_repr; added create_mode
 */
 
 /* Resources parameters:
@@ -44,7 +45,8 @@ params.proteomesdir = "${projectDir}/proteomes/"
 params.outdir = "${projectDir}/outdir/"
 
 //behaviour (steps to perform)
-params.repr = false // if true, extract clusters' representative sequences
+params.repr = false // if true, extract clusters' mmseqs representative sequences
+params.mode = false // if true, extract clusters' representative sequences (with length equal to model length)
 params.extract = false // if true, extract all clusters' sequences
 params.align = false // if true, also align clusters' sequences
 
@@ -236,9 +238,9 @@ process filter_clusters {
     """
 }
 
-process create_representatives {
+process create_repr {
     maxForks params.maxForks.toInteger()
-    cpus params.extractthreads
+    cpus 1
     memory '2 GB' //10
 
     tag { name }
@@ -257,10 +259,36 @@ process create_representatives {
     set -e
     echo " .-- BEGUN ${task.process} for ${name} \$(date)"
 
-    mkdir -p ${name}_clusters/
-    tail -n +2 ${filteredClustersFile} | cut -f 5 >repr.ids
-    ${c.fasta_extractor} -f ${fastaFile} -i ${indexFile} -l repr.ids >${name}_repr.fa
-    rm repr.ids
+    ${c.extract_clusters} --input_file ${filteredClustersFile} --out_dir ${name}_clusters --single_file ${fastaFile} -g repr
+    mv ${name}_clusters/repr.fa ${name}_repr.fa
+
+    echo " '-- ENDED ${task.process} \$(date)"
+    """
+}
+
+process create_mode {
+    maxFomode params.maxForks.toInteger()
+    cpus 1
+    memory '2 GB' //10
+
+    tag { name }
+
+    publishDir "${params.outdir}", mode: 'symlink'
+
+    input:
+    tuple val(c), val(name), path(filteredClustersFile), path(fastaFile), path(indexFile)
+
+    output:
+    tuple val(c), val(name), path("${name}_mode.fa")
+
+    script:
+    """
+    set -u
+    set -e
+    echo " .-- BEGUN ${task.process} for ${name} \$(date)"
+
+    ${c.extract_clusters} --input_file ${filteredClustersFile} --out_dir ${name}_clusters --single_file ${fastaFile} -g mode
+    mv ${name}_clusters/mode.fa ${name}_mode.fa
 
     echo " '-- ENDED ${task.process} \$(date)"
     """
@@ -398,6 +426,9 @@ workflow {
     if(params.repr) {
         log.info "ALSO: create_repr"
     }
+    if(params.mode) {
+        log.info "ALSO: create_mode"
+    }
     println "-----"
 
     //1) channel with subfolders of the proteomesdir (e.g. proteomesdir/ecoli, proteomesdir/spneumo)
@@ -440,9 +471,13 @@ workflow {
             tuple(config, name, labelledClustersFile, fastaFile, indexFile)
         }
 
-        //7) create fasta file with sequences of mmseqs cluster representatives
+        //7.1) create fasta file with sequences of mmseqs cluster representatives
         if(params.repr) {
-            extract_ch | create_representatives
+            extract_ch | create_repr
+        }
+        //7.2) create fasta file with sequences of seqlen_mode cluster representatives
+        if(params.mode) {
+            extract_ch | create_mode
         }
 
         //8) extract clusters
