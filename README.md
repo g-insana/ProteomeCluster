@@ -86,7 +86,7 @@ Compare different clustering runs (e.g. parameter tuning):
 ## 📦 Requirements
 
 - [MMseqs2](https://github.com/soedinglab/MMseqs2)
-- [Nextflow](https://www.nextflow.io/) >
+- [Nextflow](https://www.nextflow.io/) ≥ 24
 - Python ≥ 3.8
 
 Optional:
