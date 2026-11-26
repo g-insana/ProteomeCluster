@@ -38,6 +38,7 @@ Parallel processing (using --threads):
     The input file will be split in a number of chunks equal to the number of threads and each thread will work in parallel to create output cluster fasta files.
 
 Options for comprehensive outputs:
+
     --uniq: to keep only unique sequences, merging identifiers into one header; e.g.:
     >4698918:ENSSSCP00035021316 4698918:ENSSSCP00035021317 4698918:ENSSSCP00035021319 4698918:ENSSSCP00035021320
     (protein identifiers sharing the same sequence are printed in the header, space separated)
