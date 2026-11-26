@@ -13,7 +13,7 @@ ProteomeCluster enables:
 
 - High-performance **clustering** using MMseqs2
 - Flexible **cluster filtering and annotation**
-- Optional **creation of representatives FASTA file**
+- Optional **creation of representatives FASTA files**
 - Optional **sequence extraction and multiple alignment**
 - Advanced **comparison of clustering strategies**
 - Exploration of **merge/split cluster events**
@@ -44,12 +44,15 @@ The single processes can also be run independently via the provided python scrip
 
 ### 🔹 Medium Workflow
 
-- Extract the sequence of mmseqs clusters' representatives
+- Extract clusters' mmseqs representatives
+- Extract clusters' mode length sequences (those with length equal to the mode of each cluster's sequence lengths or the one closest to the median of them if there is no mode)
 
 **Outputs:**
 
 - `*_repr.fa`
-  - FASTA file with the representatives' sequences
+  - FASTA file with the mmseqs representatives sequences
+- `*_mode.fa`
+  - FASTA file with the mode length representatives
    
 ---
 
@@ -62,8 +65,10 @@ Optional downstream processing after clustering:
 
 **Outputs:**
 
-- Cluster FASTA files (one per cluster)
-- Cluster alignment files (one per cluster)
+- `*_clusters/*.fa`
+  - Cluster FASTA files (one per cluster)
+- `*_alignments/*.fa`
+  - Cluster alignment files (one per cluster)
 
 ---
 
@@ -91,7 +96,7 @@ Compare different clustering runs (e.g. parameter tuning):
 
 Optional:
 
-- [ffdb](https://github.com/g-insana/ffdb.py) (for sequence extraction)
+- [ffdb](https://github.com/g-insana/ffdb.py) (for sequence extraction: **Medium** and **Extended** workflows)
 - [Biopython](https://biopython.org/) (for alignment processing)
 - Clustal Omega (`clustalo`) (for multiple sequence alignments)
 - [scikit-learn](https://scikit-learn.org) (for meta-clustering metrics)
@@ -136,12 +141,16 @@ either locally or on HPC, choosing your preferred parameters, editing the follow
 ./cluster_and_repr-slurm.sh
 ```
 
-
 #### Extended workflow
 
 ```bash
 ./cluster_and_align-local.sh
 ./cluster_and_align-slurm.sh
+```
+
+**Note**: you can add command line parameters to those shell scripts, e.g.
+```bash
+./cluster_only-local.sh --mmseqs_exe /your/path/to/mmseqs
 ```
 
 ---
@@ -160,9 +169,9 @@ outdir/
 Included:
 
 - 10 proteomes from [UniProtKB](https://https://www.uniprot.org)
-- belonging to two species
+- belonging to two species (ecoli and spneumo)
 
-Run immediately without setup.
+For quickstart run without any setup.
 
 ---
 
@@ -201,7 +210,8 @@ See full list of parameters below in the [Documentation](#-documentation) sectio
 | `--proteomesdir` | Input proteome directory |
 | `--outdir` | Output directory |
 | `--proteomes_threshold` | Minimum proteomes per cluster |
-| `--repr` | Extract representatives' sequences |
+| `--repr` | Extract mmseqs representatives' sequences |
+| `--mode` | Extract mode-length representatives' sequences |
 | `--extract` | Extract all clusters' sequences |
 | `--align` | Perform alignments |
 
@@ -215,7 +225,7 @@ See full list of parameters below in the [Documentation](#-documentation) sectio
 | `--coverage` | Minimum alignment coverage (0–1) |
 | `--min_seq_id` | Minimum sequence identity (0–1) |
 | `--seq_id_mode` | Identity calculation mode |
-| `--mmseqs_exe` | Path to MMseqs2 executable if not in $PATH |
+| `--mmseqs_exe` | Path to MMseqs2 executable, if not in $PATH |
 
 ---
 
@@ -235,7 +245,7 @@ See full list of parameters below in the [Documentation](#-documentation) sectio
 #### Advanced
 
 ```bash
---mmseqs_additional "--clust-hash 1 --kmer-per-seq 100 ..."
+--mmseqs_additional "-s 7.5 --kmer-per-seq 100 --clust-hash 1 --cluster-version 2 --linclust-version 2 ..."
 ```
 (custom MMseqs2 parameters for tuning speed vs sensitivity vs accuracy)
 
@@ -344,10 +354,9 @@ usage: filter_clusters.py [-h] -i INPUT_FILE -o OUT_FILE [-m MINPROTEOMES] [-t T
 This script extracts FASTA sequences for protein identifiers grouped by cluster from a TSV (like the output of `filter_clusters.py`), retrieving sequences from ffdb-indexed FASTA files and writing one FASTA file per cluster.
 
 ```bash
-usage: extract_clusters.py [-h] (-d FASTA_DIR | -s SINGLE_FILE | -w URL) -i INPUT_FILE -o OUT_DIR [-u]
-                           [-a] [-ut] [-m MINPROTEINS] [-r RESTRICT] [-c CLUSTER [CLUSTER ...]]
+usage: extract_clusters.py [-h] (-d FASTA_DIR | -s SINGLE_FILE | -w URL) -i INPUT_FILE -o OUT_DIR [-u] [-a]
+                           [-ut] [-m MINPROTEINS] [-r RESTRICT] [-c CLUSTER [CLUSTER ...]] [-g {all,repr,mode}]
                            [-p PREFIX] [-e EXTENSION] [-t THREADS] [-f] [-q]
-
 ```
 
 ---
