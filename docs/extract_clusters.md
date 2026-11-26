@@ -4,13 +4,16 @@ This script extracts FASTA sequences for protein identifiers grouped by cluster 
  * Expects a TSV with at least two columns: cluster_id and protein_ids
    - Each entry in the protein_ids column is a space-separated token formatted as: proteome_id:protein_id
  * Writes, for each cluster, a FASTA file named <cluster_id>.fa containing the sequences of the proteins in that cluster
-   - Sequences are extracted from FASTA files located in FASTA_DIR using ffdb index files (filename.idx)
-   - Proteome IDs map to FASTA filenames; the script supports recovering filenames using optional prefixes/extensions
+
+Alternatively, it can extract only the cluster representatives (-g repr) or only one mode length protein per cluster (-g mode).
+
+ - Sequences are extracted from FASTA files located in FASTA_DIR using ffdb index files (filename.idx)
+ - Proteome IDs map to FASTA filenames; the script supports recovering filenames using optional prefixes/extensions
 
 
 Sample input file:
     cluster_id	protein_ids	proteins_count	proteomes_count
-    0	35497:ENSSSCP00000055324|661 4698922:ENSSSCP00055011301|568 4698918:ENSSSCP00035021320|596	3	3
+    0	35497:ENSSSCP00000055324|661 4698922:ENSSSCP00055011301|568 4698918:ENSSSCP00035021320|596	3
 
 The script would create a fasta file called 0.fa containing the sequences listed for that cluster_id,
 extracting them from the files corresponding to the proteome_id labels placed before each protein identifier.
@@ -24,9 +27,12 @@ Sample output file (sequence length, if present, is removed):
     MNIKSLMKKSLVTCISFFFFFFSRNLVVRR[...]
 
 Example calls:
+
     extract_clusters.py --input_file results_pig/Protein_clusters_m13.tsv --fasta_dir pig --out_dir clusters_pig -e .fa -p proteome_ -q #extract from a directory containing individual fasta files
 
     extract_clusters.py --input_file results_pig/Protein_clusters_m13.tsv --single_file pig --out_dir clusters_pig -e .fa -p proteome_ -q #extract from a single combined fasta file
+
+    extract_clusters.py --input_file results_pig/Protein_clusters_m13.tsv --single_file pig --out_dir clusters_pig -e .fa -p proteome_ -q -g repr #extract only the cluster representatives' sequences into a single file repr.fa
 
 Parallel processing (using --threads):
     The input file will be split in a number of chunks equal to the number of threads and each thread will work in parallel to create output cluster fasta files.
@@ -51,6 +57,7 @@ Options for comprehensive outputs:
 | Options | Values  | Help |
 | ------- | ------- | ---- |
 | <pre>-h --help</pre> | Flag. | show this help message and exit |
+| <pre>-g --goal</pre> | Default: `all` | Objective of the extraction: [all] sequences in all clusters (default); only mmseqs [repr]esentatives of each cluster; one [mode] length protein per cluster |
 | <pre>-p --prefix</pre> | Optional.<br/>Type: str | Prefix for fasta filenames, to be added to proteome identifiers\; e.g. \'proteome\_\' |
 | <pre>-e --extension</pre> | Optional.<br/>Type: str | Extension for files in fasta\_dir, to be added to proteome identifiers\; e.g. \'.fa\' |
 | <pre>-t --threads</pre> | Default: `1` | Number of threads for parallel processing. |
