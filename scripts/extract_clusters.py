@@ -43,8 +43,11 @@ This script extracts FASTA sequences for protein identifiers grouped by cluster 
  * Expects a TSV with at least two columns: cluster_id and protein_ids
    - Each entry in the protein_ids column is a space-separated token formatted as: proteome_id:protein_id
  * Writes, for each cluster, a FASTA file named <cluster_id>.fa containing the sequences of the proteins in that cluster
-   - Sequences are extracted from FASTA files located in FASTA_DIR using ffdb index files (filename.idx)
-   - Proteome IDs map to FASTA filenames; the script supports recovering filenames using optional prefixes/extensions
+
+Alternatively, it can extract only the cluster representatives (-g repr) or only one mode length protein per cluster (-g mode).
+
+ - Sequences are extracted from FASTA files located in FASTA_DIR using ffdb index files (filename.idx)
+ - Proteome IDs map to FASTA filenames; the script supports recovering filenames using optional prefixes/extensions
 
 
 Sample input file:
@@ -66,6 +69,8 @@ Example calls:
     extract_clusters.py --input_file results_pig/Protein_clusters_m13.tsv --fasta_dir pig --out_dir clusters_pig -e .fa -p proteome_ -q #extract from a directory containing individual fasta files
 
     extract_clusters.py --input_file results_pig/Protein_clusters_m13.tsv --single_file pig --out_dir clusters_pig -e .fa -p proteome_ -q #extract from a single combined fasta file
+
+    extract_clusters.py --input_file results_pig/Protein_clusters_m13.tsv --single_file pig --out_dir clusters_pig -e .fa -p proteome_ -q -g repr #extract only the cluster representatives' sequences into a single file repr.fa
 
 Parallel processing (using --threads):
     The input file will be split in a number of chunks equal to the number of threads and each thread will work in parallel to create output cluster fasta files.
